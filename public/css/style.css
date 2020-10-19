@@ -1,0 +1,72 @@
+body {
+  /* Background pattern from Toptal Subtle Patterns */
+  background-image: url(../img/escheresque_ste.png);
+}
+
+.input-err {
+  color: red;
+}
+
+.bg-sea {
+  background-color: #008080;
+}
+
+.bg-steelblue {
+  background-color: #4682B4;
+}
+
+.navbar-brand {
+  font-size: 36px;
+}
+
+.navbar-brand i {
+  font-size: 40px;
+}
+
+@media (max-width: 767px) {
+  .navbar > * {
+    width: 100%;
+  }
+
+  .navbar-brand {
+    text-align: center;
+  }
+}
+
+.baner {
+  background-color: #fcfcfc;
+}
+
+.slogan {
+  font-size: 20px;
+}
+
+@media (min-width: 768px) {
+  .slogan {
+    text-align: justify;
+  }
+}
+
+.cite {
+  font-size: 18px;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .baner .h2 {
+    padding-left: 75px;
+    padding-right: 75px;
+  }
+}
+
+#mainmenu {
+  font-size: 18px;
+}
+
+.disabled {
+  cursor: default;
+}
+
+.incomes p,
+.expanses p {
+  font-size: 20px;
+}
