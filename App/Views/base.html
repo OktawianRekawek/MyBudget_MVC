@@ -25,10 +25,10 @@
   <header class="container-fluid bg-sea text-light">
     <nav class="container navbar navbar-dark">
       <a href="/" class="navbar-brand mr-auto"><i class="fas fa-search-dollar mr-1"></i> MyBudget</a>
-      <a href="" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
+      <a href="/login" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
         <i class="fas fa-sign-in-alt mr-1"></i> Zaloguj się
       </a>
-      <a href="" class="btn btn-info my-1 font-weight-bold" role="button"> <i class="fas fa-user-plus mr-1"></i> Zarejestruj się
+      <a href="/register" class="btn btn-info my-1 font-weight-bold" role="button"> <i class="fas fa-user-plus mr-1"></i> Zarejestruj się
       </a>
 
     </nav>
@@ -42,8 +42,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 
-
+  {% block footer %}
+  {% endblock %}
 
 </body>
+
+
 
 </html>
