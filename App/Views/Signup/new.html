@@ -26,6 +26,14 @@
           minlength: 6,
           validPassword: true
         }
+      },
+      messages: {
+        email: {
+          remote: 'email already taken'
+        }
+      },
+      errorPlacement: function (error, element) {
+        error.insertAfter($(element).parent('div'));
       }
     });
     
