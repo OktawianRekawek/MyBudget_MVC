@@ -73,7 +73,7 @@
           <div class="col-sm-8">
             <div class="input-group">
               <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
-              <input type="text" class="form-control" id="name" name="name" value="">
+              <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}">
             </div>
           </div>
         </div>
@@ -82,7 +82,7 @@
           <div class="col-sm-8">
             <div class="input-group">
               <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-envelope-square"></i></span></div>
-              <input type="email" class="form-control" id="email" name="email" value="">
+              <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
             </div>
           </div>
         </div>
@@ -91,7 +91,7 @@
           <div class="col-sm-8">
             <div class="input-group">
               <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-lock"></i></span></div>
-              <input type="password" class="form-control" id="password" name="password" value="">
+              <input type="password" class="form-control" id="password" name="password">
               <div class="input-group-append"><span class="input-group-text toggle-password" toggle="#password"><i class="fa fa-fw fa-eye"></i></span></div>
             </div>
           </div>

@@ -6,3 +6,42 @@ Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
 Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('favicon.ico')
 #1 {main}
 Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[26-Oct-2020 19:48:00 Europe/Berlin] Uncaught exception: 'Error' with message 'Undefined class constant 'SECRET_KEY''
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\App\Models\User.php(49): App\Token->getHash()
+#1 C:\xampp\htdocs\mybudget_mvc\App\Controllers\Signup.php(32): App\Models\User->save()
+#2 [internal function]: App\Controllers\Signup->createAction()
+#3 C:\xampp\htdocs\mybudget_mvc\Core\Controller.php(47): call_user_func_array(Array, Array)
+#4 C:\xampp\htdocs\mybudget_mvc\Core\Router.php(122): Core\Controller->__call('create', Array)
+#5 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('signup/create')
+#6 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\App\Token.php' on line 51
+[26-Oct-2020 19:48:01 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[26-Oct-2020 20:12:58 Europe/Berlin] Uncaught exception: 'Error' with message 'Undefined class constant 'SECRET_KEY''
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\App\Models\User.php(49): App\Token->getHash()
+#1 C:\xampp\htdocs\mybudget_mvc\App\Controllers\Signup.php(32): App\Models\User->save()
+#2 [internal function]: App\Controllers\Signup->createAction()
+#3 C:\xampp\htdocs\mybudget_mvc\Core\Controller.php(47): call_user_func_array(Array, Array)
+#4 C:\xampp\htdocs\mybudget_mvc\Core\Router.php(122): Core\Controller->__call('create', Array)
+#5 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('signup/create')
+#6 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\App\Token.php' on line 51
+[26-Oct-2020 20:12:58 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[26-Oct-2020 20:16:44 Europe/Berlin] Uncaught exception: 'Error' with message 'Undefined class constant 'SECRET_KEY''
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\App\Models\User.php(49): App\Token->getHash()
+#1 C:\xampp\htdocs\mybudget_mvc\App\Controllers\Signup.php(32): App\Models\User->save()
+#2 [internal function]: App\Controllers\Signup->createAction()
+#3 C:\xampp\htdocs\mybudget_mvc\Core\Controller.php(47): call_user_func_array(Array, Array)
+#4 C:\xampp\htdocs\mybudget_mvc\Core\Router.php(122): Core\Controller->__call('create', Array)
+#5 C:\xampp\htdocs\mybudget_mvc\public\index.php(36): Core\Router->dispatch('signup/create')
+#6 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\App\Token.php' on line 51
+[26-Oct-2020 20:16:44 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(36): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
