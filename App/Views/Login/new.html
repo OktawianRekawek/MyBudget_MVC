@@ -20,7 +20,6 @@
               <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
               <input type="text" class="form-control" id="email" name="email" value="">
             </div>
-
           </div>
         </div>
         <div class="form-group row justify-content-center">
@@ -31,6 +30,10 @@
               <input type="password" class="form-control" id="password" name="password">
             </div>
           </div>
+        </div>
+        <div class="custom-control custom-checkbox pb-3">
+          <input name="remember_me" id="remember_me" type="checkbox" class="custom-control-input" {% if remember_me %} checked="checked" {% endif %}>
+          <label class="custom-control-label" for="remember_me">Zapamiętaj mnie</label>
         </div>
         <button type="submit" class="btn btn-info btn-lg font-weight-bold">Zaloguj</button>
       </form>

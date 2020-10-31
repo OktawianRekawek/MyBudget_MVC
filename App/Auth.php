@@ -71,13 +71,13 @@ class Auth
   }
   
   /**
-   * Get the originally-requested page to return to after requiring login, or default to the homepage
+   * Get the originally-requested page to return to after requiring login, or default to the profile page
    *
    * @return void
    */
   public static function getReturnToPage()
   {
-    return $_SESSION['return_to'] ?? '/';
+    return $_SESSION['return_to'] ?? '/profile/show';
   }
   
   /**
