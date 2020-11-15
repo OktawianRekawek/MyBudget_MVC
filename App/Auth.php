@@ -77,7 +77,7 @@ class Auth
    */
   public static function getReturnToPage()
   {
-    return $_SESSION['return_to'] ?? '/profile/show';
+    return $_SESSION['return_to'] ?? '/';
   }
   
   /**
@@ -92,7 +92,6 @@ class Auth
       return User::findByID($_SESSION['user_id']);
       
     } else {
-      
       return static::loginFromRememberCookie();
       
     }
