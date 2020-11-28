@@ -31,6 +31,7 @@ class Signup extends \Core\Controller
     
     if ($user->save()) {
       
+      User::addDefaultDbStructure($user->email);
       $user->sendActivationEmail();
       
       $this->redirect('/signup/success');

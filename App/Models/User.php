@@ -445,4 +445,88 @@ class User extends \Core\Model
     return false;
     
   }
+  
+  /**
+   * Add default expanses categories to database for new user
+   *
+   * @return void
+   */
+  protected static function addDefaultExpansesCategories($email)
+  {
+    $user = static::findByEmail($email);
+    
+    $db = static::getDB();
+    
+    $expensesCategoryQuery = $db->query("SELECT name FROM expenses_category_default");
+    $expensesCategories = $expensesCategoryQuery->fetchAll();
+
+    $sql = 'INSERT INTO expenses_category_assigned_to_users VALUES (NULL, :id, :category)';
+    
+    foreach ($expensesCategories as $expCategory){
+      $stmt = $db->prepare($sql);
+      $stmt->bindValue(':id', $user->id, PDO::PARAM_INT);
+      $stmt->bindValue(':category', $expCategory['name'], PDO::PARAM_STR);
+      $stmt->execute();
+    }
+  }
+  
+  /**
+   * Add default incomes categories to database for new user
+   *
+   * @return void
+   */
+  protected static function addDefaultIncomesCategories($email)
+  {
+    $user = static::findByEmail($email);
+    
+    $db = static::getDB();
+    
+    $incomesCategoryQuery = $db->query("SELECT name FROM incomes_category_default");
+    $incomesCategories = $incomesCategoryQuery->fetchAll();
+
+    $sql = 'INSERT INTO incomes_category_assigned_to_users VALUES (NULL, :id, :category)';
+    
+    foreach ($incomesCategories as $incCategory){
+      $stmt = $db->prepare($sql);
+      $stmt->bindValue(':id', $user->id, PDO::PARAM_INT);
+      $stmt->bindValue(':category', $incCategory['name'], PDO::PARAM_STR);
+      $stmt->execute();
+    }
+  }
+  
+  /**
+   * Add default payment methods to database for new user
+   *
+   * @return void
+   */
+  protected static function addDefaultPaymentMethods($email)
+  {
+    $user = static::findByEmail($email);
+    
+    $db = static::getDB();
+    
+    $paymentMethodsQuery = $db->query("SELECT name FROM payment_methods_default");
+    $paymentMethods = $paymentMethodsQuery->fetchAll();
+
+    $sql = 'INSERT INTO payment_methods_assigned_to_users VALUES (NULL, :id, :category)';
+    
+    foreach ($paymentMethods as $payMethod){
+      $stmt = $db->prepare($sql);
+      $stmt->bindValue(':id', $user->id, PDO::PARAM_INT);
+      $stmt->bindValue(':category', $payMethod['name'], PDO::PARAM_STR);
+      $stmt->execute();
+    }
+  }
+  
+  /**
+   * Add default database structure for new user
+   *
+   * @return void
+   */
+  public static function addDefaultDbStructure($email)
+  {
+    static::addDefaultExpansesCategories($email);
+    static::addDefaultIncomesCategories($email);
+    static::addDefaultPaymentMethods($email);
+  }
 }
