@@ -29,9 +29,9 @@ class Profile extends Authenticated
    *
    * @return void
    */
-  public function showAction()
+  public function addIncomeAction()
   {
-    View::renderTemplate('Profile/show.html', [
+    View::renderTemplate('Profile/incomes.html', [
       'user' => $this->user
     ]);
   }
