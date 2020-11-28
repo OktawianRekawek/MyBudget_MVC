@@ -2,3 +2,185 @@
 Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(32): Core\Router->dispatch('favicon.ico')
 #1 {main}
 Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:36:59 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:37:05 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:37:11 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:37:34 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:39:07 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:39:08 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:40:46 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:40:49 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:40:49 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('favicon.ico')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:40:57 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:41:49 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:41:52 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:44:46 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('favicon.ico')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:44:46 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:48:47 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:50:30 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:50:36 Europe/Berlin] Uncaught exception: 'PDOException' with message 'SQLSTATE[HY000] [1049] Unknown database 'mvc''
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\Core\Model.php(27): PDO->__construct('mysql:host=loca...', 'root', '')
+#1 C:\xampp\htdocs\mybudget_mvc\App\Models\User.php(140): Core\Model::getDB()
+#2 C:\xampp\htdocs\mybudget_mvc\App\Models\User.php(161): App\Models\User::findByEmail('')
+#3 C:\xampp\htdocs\mybudget_mvc\App\Controllers\Login.php(32): App\Models\User::authenticate('', '')
+#4 [internal function]: App\Controllers\Login->createAction()
+#5 C:\xampp\htdocs\mybudget_mvc\Core\Controller.php(47): call_user_func_array(Array, Array)
+#6 C:\xampp\htdocs\mybudget_mvc\Core\Router.php(122): Core\Controller->__call('create', Array)
+#7 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('login/create')
+#8 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Model.php' on line 27
+[19-Oct-2020 15:50:36 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('login/css/style...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:50:40 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:53:16 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:53:21 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:53:28 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:55:23 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:59:10 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:59:11 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:59:16 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 15:59:17 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(34): Core\Router->dispatch('favicon.ico')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:03:45 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:06:22 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:07:06 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('signup/css/styl...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:08:32 Europe/Berlin] Uncaught exception: 'PDOException' with message 'SQLSTATE[HY000] [1049] Unknown database 'mvc''
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\Core\Model.php(27): PDO->__construct('mysql:host=loca...', 'root', '')
+#1 C:\xampp\htdocs\mybudget_mvc\App\Models\User.php(140): Core\Model::getDB()
+#2 C:\xampp\htdocs\mybudget_mvc\App\Models\User.php(161): App\Models\User::findByEmail('')
+#3 C:\xampp\htdocs\mybudget_mvc\App\Controllers\Login.php(32): App\Models\User::authenticate('', '')
+#4 [internal function]: App\Controllers\Login->createAction()
+#5 C:\xampp\htdocs\mybudget_mvc\Core\Controller.php(47): call_user_func_array(Array, Array)
+#6 C:\xampp\htdocs\mybudget_mvc\Core\Router.php(122): Core\Controller->__call('create', Array)
+#7 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('login/create')
+#8 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Model.php' on line 27
+[19-Oct-2020 16:08:32 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('login/css/style...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:19:17 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('js/hideShowPass...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:19:17 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('js/app.js')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:34:32 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('js/hideShowPass...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:34:32 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('js/app.js')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:34:32 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('js/hideShowPass...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:34:32 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('js/app.js')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:47:32 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('js/app.js')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:47:32 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('js/hideShowPass...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:47:32 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('js/hideShowPass...')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134
+[19-Oct-2020 16:47:32 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(35): Core\Router->dispatch('js/app.js')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 134

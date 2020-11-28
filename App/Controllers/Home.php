@@ -38,8 +38,7 @@ class Home extends \Core\Controller
    */
   public function indexAction()
   {
-    //echo 'Hello from the index action in the Home controller!';
-    View::renderTemplate('Home/index.html');
+      View::renderTemplate('Home/index.html');
   }
   
   

@@ -16,23 +16,72 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 
 </head>
 
 <body>
 
+  {% if current_user %}
+
+  <header class="container-fluid bg-sea text-light">
+    <nav class="container navbar navbar-dark navbar-expand-xl">
+      <a href="../index.php" class="navbar-brand mr-auto"><i class="fas fa-search-dollar mr-1"></i> MyBudget</a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Przełącznik nawigacji">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainmenu">
+
+        <ul class="navbar-nav mr-auto">
+
+          <li class="nav-item active">
+            <a class="nav-link" href="#"><i class="fas fa-home"></i> Start </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-wallet"></i> Dodaj Przychód </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-shopping-basket"></i> Dodaj Wydatek </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-balance-scale"></i> Przeglądaj Bilans </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#"><i class="fas fa-cogs"></i> Ustawenia </a>
+          </li>
+
+        </ul>
+
+        <a href="/login/destroy" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
+          <i class="fas fa-sign-out-alt"></i> Wyloguj się
+        </a>
+
+      </div>
+
+    </nav>
+  </header>
+
+  {% else %}
+
   <header class="container-fluid bg-sea text-light">
     <nav class="container navbar navbar-dark">
       <a href="/" class="navbar-brand mr-auto"><i class="fas fa-search-dollar mr-1"></i> MyBudget</a>
-      <a href="" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
+      <a href="/login" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
         <i class="fas fa-sign-in-alt mr-1"></i> Zaloguj się
       </a>
-      <a href="" class="btn btn-info my-1 font-weight-bold" role="button"> <i class="fas fa-user-plus mr-1"></i> Zarejestruj się
+      <a href="/register" class="btn btn-info my-1 font-weight-bold" role="button"> <i class="fas fa-user-plus mr-1"></i> Zarejestruj się
       </a>
 
     </nav>
   </header>
+
+  {% endif %}
 
   {% block body %}
   {% endblock %}
@@ -42,8 +91,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 
-
+  {% block footer %}
+  {% endblock %}
 
 </body>
+
+
 
 </html>
