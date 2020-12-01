@@ -5,6 +5,7 @@ namespace App\Controllers;
 use \Core\View;
 use \App\Auth;
 use \App\Flash;
+use \App\Models\User;
 
 /**
  * Profile controller
@@ -25,15 +26,17 @@ class Profile extends Authenticated
   }
   
   /**
-   * Show the profile
+   * Show addincome page
    *
    * @return void
    */
   public function addIncomeAction()
   {
     View::renderTemplate('Profile/incomes.html', [
-      'user' => $this->user
-    ]);
+        'user' => $this->user,
+        'currentDate' => date('Y-m-d'),
+        'categories' => User::getIncomeCategories($this->user->id)
+      ]);
   }
   
   /**

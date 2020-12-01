@@ -449,6 +449,8 @@ class User extends \Core\Model
   /**
    * Add default expanses categories to database for new user
    *
+   * @param string $email email addres to search for
+   *
    * @return void
    */
   protected static function addDefaultExpansesCategories($email)
@@ -472,6 +474,8 @@ class User extends \Core\Model
   
   /**
    * Add default incomes categories to database for new user
+   *
+   * @param string $email email addres to search for
    *
    * @return void
    */
@@ -497,6 +501,8 @@ class User extends \Core\Model
   /**
    * Add default payment methods to database for new user
    *
+   * @param string $email email addres to search for
+   *
    * @return void
    */
   protected static function addDefaultPaymentMethods($email)
@@ -521,6 +527,8 @@ class User extends \Core\Model
   /**
    * Add default database structure for new user
    *
+   * @param string $email email addres to search for
+   *
    * @return void
    */
   public static function addDefaultDbStructure($email)
@@ -528,5 +536,23 @@ class User extends \Core\Model
     static::addDefaultExpansesCategories($email);
     static::addDefaultIncomesCategories($email);
     static::addDefaultPaymentMethods($email);
+  }
+  
+  /**
+   * Get income categories assigned to user
+   *
+   * @return mixed array if found, false otherwise
+   */
+  public static function getIncomeCategories($id)
+  {
+    $sql = 'SELECT name FROM incomes_category_assigned_to_users WHERE user_id = :id';
+    
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    
+    $stmt->execute();
+    
+    return $stmt->fetchAll();
   }
 }
