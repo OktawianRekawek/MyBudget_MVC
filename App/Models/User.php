@@ -555,4 +555,35 @@ class User extends \Core\Model
     
     return $stmt->fetchAll();
   }
+  
+  public function addIncome($data)
+  {
+    $amount = $data['amount'];
+    $selectedCategory = $data['category'];
+    
+    if (preg_match("/^[0-9]+(\,[0-9]{2})?$/", $amount)) {
+      
+      $correctAmount = str_replace(',','.',$amount);
+      
+      $sql = "SELECT id FROM incomes_category_assigned_to_users WHERE user_id = '$this->id' AND name = '$selectedCategory'";
+      
+      $db = static::getDB();
+      $stmt = $db->prepare($sql);
+    
+      $stmt->execute();
+
+      $categoryId = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+      
+      $sql = 'INSERT INTO incomes VALUES (NULL, :userid, :categoryId, :amount, :date, :desc)';
+      $stmt = $db->prepare($sql);
+      
+      $stmt->bindValue(':userid', $this->id, PDO::PARAM_INT);
+      $stmt->bindValue(':date', $data['date'], PDO::PARAM_STR);
+      $stmt->bindValue(':amount', $correctAmount, PDO::PARAM_STR);
+      $stmt->bindValue(':categoryId', $categoryId[0], PDO::PARAM_INT);
+      $stmt->bindValue(':desc', $data['comment'], PDO::PARAM_STR);
+      return $stmt->execute();
+    }
+    return false;
+  }
 }

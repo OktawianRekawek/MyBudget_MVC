@@ -73,4 +73,34 @@ class Profile extends Authenticated
       
     }
   }
+  
+  /**
+   * Add income to database
+   *
+   * @return void
+   */
+  public function createIncomeAction()
+  {
+    if ($this->user->addIncome($_POST)) {
+      
+      View::renderTemplate('Profile/incomes.html', [
+        'success' => 'Przychód został dodany!',
+        'user' => $this->user,
+        'currentDate' => date('Y-m-d'),
+        'categories' => User::getIncomeCategories($this->user->id)
+      ]);
+
+    } else {
+      
+      View::renderTemplate('Profile/incomes.html', [
+        'error' => 'Wpisz prawidłową kwotę!',
+        'user' => $this->user,
+        'currentDate' => $_POST['date'],
+        'categories' => User::getIncomeCategories($this->user->id),
+        'currCategory' => $_POST['category'],
+        'currComment' => $_POST['comment'],
+        'currAmount' => $_POST['amount']
+      ]);
+    }
+  }
 }
