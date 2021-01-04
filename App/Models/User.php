@@ -664,4 +664,51 @@ class User extends \Core\Model
     }
     return false;
   }
+  
+  public function getExpenses($startDate, $endDate)
+  {
+    $sql = "SELECT c.name, SUM(amount) as amount
+            FROM expenses_category_assigned_to_users as c, expenses as e, users as u
+            WHERE c.user_id=:userid
+            AND c.id = e.expense_category_assigned_to_user_id
+            AND e.user_id = u.id
+            AND c.user_id = u.id
+            AND e.date_of_expense BETWEEN :startDate AND :endDate
+            GROUP BY c.name";
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+    
+    $stmt->bindValue(':userid', $this->id, PDO::PARAM_INT);
+    $stmt->bindValue(':startDate', $startDate, PDO::PARAM_STR);
+    $stmt->bindValue(':endDate', $endDate, PDO::PARAM_STR);
+    
+    $stmt->execute();
+    
+    $expenses = $stmt->fetchAll();
+    return $expenses;
+  }
+  
+  public function getIncomes($startDate, $endDate)
+  {
+    $sql = "SELECT c.name, SUM(amount) as amount
+            FROM incomes_category_assigned_to_users as c, incomes as i, users as u
+            WHERE c.user_id=:userid
+            AND c.id = i.income_category_assigned_to_user_id
+            AND i.user_id = u.id
+            AND c.user_id = u.id
+            AND i.date_of_income BETWEEN :startDate AND :endDate
+            GROUP BY c.name";
+
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':userid', $this->id, PDO::PARAM_INT);
+    $stmt->bindValue(':startDate', $startDate, PDO::PARAM_STR);
+    $stmt->bindValue(':endDate', $endDate, PDO::PARAM_STR);
+
+    $stmt->execute();
+
+    $incomes = $stmt->fetchAll();
+    return $incomes;
+  }
 }
