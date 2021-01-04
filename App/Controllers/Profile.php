@@ -119,7 +119,7 @@ class Profile extends Authenticated
     }
   }
   
-    /**
+  /**
    * Add expense to database
    *
    * @return void
@@ -149,5 +149,18 @@ class Profile extends Authenticated
         'currAmount' => $_POST['amount']
       ]);
     }
+  }
+  
+   /**
+   * Show balance page
+   *
+   * @return void
+   */
+  public function showBalanceAction()
+  {
+    View::renderTemplate('Profile/balance.html', [
+        'user' => $this->user,
+        'currentDate' => date('Y-m-d')
+      ]);
   }
 }
