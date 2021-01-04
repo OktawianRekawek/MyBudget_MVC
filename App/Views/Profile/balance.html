@@ -18,16 +18,38 @@
             <div class="input-group">
               <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
               <select name="period" id="period" class="form-control" onchange="submit(this);">
-
-                <option>Bieżący miesiąc</option>
-                <option>Poprzedni miesiąc</option>
-                <option>Bieżący rok</option>
-                <option>Niestandardowy</option>
+                {% for period in periods %}
+                {% if period is same as currPeriod %}
+                <option selected>{{ period }}</option>
+                {% else %}
+                <option>{{ period }}</option>
+                {% endif %}
+                {% endfor %}
               </select>
-
             </div>
           </div>
         </div>
+        {% if currPeriod == "Niestandardowy" %}
+        <div class="form-group row justify-content-center">
+          <label for="date1" class="col-sm-1 col-form-label">Od</label>
+          <div class="col-xl-5">
+            <div class="input-group">
+              <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
+              <input type="date" class="form-control" id="date1" name="date1" value="{{date1}}">
+            </div>
+          </div>
+          <label for="date2" class="col-sm-1 col-form-label">Do</label>
+          <div class="col-xl-5">
+            <div class="input-group">
+              <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
+              <input type="date" class="form-control" id="date2" name="date2" value="{{date2}}">
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-info btn-lg font-weight-bold">Wyszukaj</button>
+        {% else %}
+        <h3 class="text-center">{{date1}} - {{date2}}</h3>
+        {% endif %}
       </form>
 
     </div>
@@ -40,7 +62,18 @@
         </div>
         <div class="col-6 text-right border-bottom mb-3">
           <h4>Wartość [PLN]</h4>
+
         </div>
+        {% for income in incomes %}
+        <div class='col-6'>
+          <p>
+            {{income.name}}
+          </p>
+        </div>
+        <div class='col-6 text-right'>
+          <p>{{income.amount}}</p>
+        </div>
+        {% endfor %}
       </div>
     </div>
     <div class="col-md-5 bg-light mx-1 expanses order-2 order-md-1">
@@ -51,7 +84,18 @@
         </div>
         <div class="col-6 text-right border-bottom mb-3">
           <h4>Wartość [PLN]</h4>
+
         </div>
+        {% for expense in expenses %}
+        <div class='col-6'>
+          <p>
+            {{expense.name}}
+          </p>
+        </div>
+        <div class='col-6 text-right'>
+          <p>{{expense.amount}}</p>
+        </div>
+        {% endfor %}
       </div>
     </div>
     <div class="col-md-5 bg-light m-1 incomes-sum order-1 order-md-2 border-top">
@@ -61,6 +105,7 @@
         </div>
         <div class="col-6 text-right">
           <h3>
+            {{incomesSum}}
           </h3>
         </div>
       </div>
@@ -72,11 +117,18 @@
         </div>
         <div class="col-6 text-right">
           <h3>
+            {{expensesSum}}
           </h3>
         </div>
       </div>
     </div>
     <div class="col-md-8 bg-light order-4 text-center my-3 py-3">
+      <h3>Bilans: {{balance}} PLN</h3>
+      {% if balance > 0 %}
+      <p class="h4 text-success">Gratulacje! Świetnie zarządzasz finansami!</p>
+      {% else %}
+      <p class="h4 text-danger">Uważaj! Twoje finanse mają się kiepsko!</p>
+      {% endif %}
     </div>
     <div class="col-md-6 bg-light incomes-graph order-5">
       <img src="../img/Pie-chart.jpg" alt="" class="img-fluid">

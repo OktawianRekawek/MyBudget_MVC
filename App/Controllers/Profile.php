@@ -158,9 +158,64 @@ class Profile extends Authenticated
    */
   public function showBalanceAction()
   {
+    $selectedPeriod="Bieżący miesiąc";
+    
+    if (isset($_POST['period'])){
+      $selectedPeriod = $_POST['period'];
+      if ($selectedPeriod == "Poprzedni miesiąc") {
+        $startDate = mktime(0,0,0,date('m')-1,1,date('Y')) ;
+        $endDate = mktime(0,0,0,date('m'),0,date('Y')) ;
+      }
+      else if ($selectedPeriod == "Bieżący rok") {
+        $startDate = mktime(0,0,0,1,1,date('Y')) ;
+        $endDate = mktime(0,0,0,12,31,date('Y')) ;
+      } else {
+      $startDate = mktime(0,0,0,date('m'),1,date('Y')) ;
+      $endDate = mktime(0,0,0,date('m')+1,0,date('Y')) ;
+      }
+    } else {
+      $startDate = mktime(0,0,0,date('m'),1,date('Y')) ;
+      $endDate = mktime(0,0,0,date('m')+1,0,date('Y')) ;
+    }
+  
+  
+   if ($selectedPeriod == "Niestandardowy" && isset($_POST['date1']) && isset($_POST['date2']) && ($_POST['date1'] <= $_POST['date2'])) {
+      $startDateSQL = $_POST['date1'];
+      $endDateSQL = $_POST['date2'];
+    } else {
+      $startDateSQL = date("Y-m-d",$startDate);
+      $endDateSQL = date("Y-m-d",$endDate);
+    }
+    
+    $expenses = $this->user->getExpenses($startDateSQL,$endDateSQL);
+    $incomes = $this->user->getIncomes($startDateSQL,$endDateSQL);
+    
+    $expensesSum = 0;
+    $incomesSum = 0;
+    
+    foreach ($expenses as $expense) {
+      $expensesSum += $expense['amount'];
+    }
+    
+    foreach ($incomes as $income) {
+      $incomesSum += $income['amount'];
+    }
+    
+    $balance = $incomesSum - $expensesSum;
+    
     View::renderTemplate('Profile/balance.html', [
         'user' => $this->user,
-        'currentDate' => date('Y-m-d')
+        'currentDate' => date('Y-m-d'),
+        'periods' => ['Bieżący miesiąc', 'Poprzedni miesiąc', 'Bieżący rok', 'Niestandardowy'],
+        'currPeriod' => $selectedPeriod,
+        'date1' => $startDateSQL,
+        'date2' => $endDateSQL,
+        'expenses' => $expenses,
+        'incomes' => $incomes,
+        'expensesSum' => $expensesSum,
+        'incomesSum' => $incomesSum,
+        'balance' => $balance
       ]);
+    
   }
 }
