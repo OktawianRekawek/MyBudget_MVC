@@ -586,4 +586,40 @@ class User extends \Core\Model
     }
     return false;
   }
+  
+  /**
+   * Get payment methods assigned to user
+   *
+   * @return mixed array if found, false otherwise
+   */
+  public static function getPaymentMethods($id)
+  {
+    $sql = 'SELECT name FROM payment_methods_assigned_to_users WHERE user_id = :id';
+    
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    
+    $stmt->execute();
+    
+    return $stmt->fetchAll();
+  }
+  
+  /**
+   * Get expense categories assigned to user
+   *
+   * @return mixed array if found, false otherwise
+   */
+  public static function getExpensesCategories($id)
+  {
+    $sql = 'SELECT name FROM expenses_category_assigned_to_users WHERE user_id = :id';
+    
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    
+    $stmt->execute();
+    
+    return $stmt->fetchAll();
+  }
 }

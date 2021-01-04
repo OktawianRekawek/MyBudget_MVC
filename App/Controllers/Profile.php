@@ -40,6 +40,21 @@ class Profile extends Authenticated
   }
   
   /**
+   * Show addExpanse page
+   *
+   * @return void
+   */
+  public function addExpenseAction()
+  {
+    View::renderTemplate('Profile/expenses.html', [
+        'user' => $this->user,
+        'currentDate' => date('Y-m-d'),
+        'categories' => User::getExpensesCategories($this->user->id),
+        'paymentMethods' => User::getPaymentMethods($this->user->id)
+      ]);
+  }
+  
+  /**
    * Show the form for editing the profile
    *
    * @return void
