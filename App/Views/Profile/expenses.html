@@ -5,20 +5,40 @@
 {% block body %}
 
 <main class="container my-3">
-  <div class="row addIncome">
+  {% if success %}
+  <div class="row addExpense">
+    <div class="col-md-8 col-lg-6 mx-auto bg-success text-center text-uppercase text-light py-2 mb-1">
+      <h2 class="h2 mb-0">{{success}}</h2>
+    </div>
+  </div>
+  {% elseif error %}
+  <div class="row addExpense">
+    <div class="col-md-8 col-lg-6 mx-auto bg-danger text-center text-uppercase text-light py-2 mb-1">
+      <h2 class="h2 mb-0">{{error}}</h2>
+    </div>
+  </div>
+  {% endif %}
+  <div class="row addExpense">
     <header class="col-md-8 col-lg-6 mx-auto bg-sea text-center text-uppercase text-light py-2">
       <h1 class="h2 mb-0">Dodaj wydatek</h1>
     </header>
     <div class="w-100"></div>
     <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
-      <form method="post">
+      <form method="post" action="/profile/createExpense">
         <div class="form-group row justify-content-center">
           <label for="amount" class="col-sm-3 col-form-label">Kwota</label>
           <div class="col-sm-8">
+            {% if error %}
+            <div class="input-group err-amount">
+              <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-dollar-sign"></i></span></div>
+              <input type="text" class="form-control" id="amount" name="amount" value={{currAmount}}>
+            </div>
+            {% else %}
             <div class="input-group">
               <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-dollar-sign"></i></span></div>
               <input type="text" class="form-control" id="amount" name="amount">
             </div>
+            {% endif %}
           </div>
         </div>
         <div class="form-group row justify-content-center">
@@ -38,7 +58,11 @@
               <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
               <select name="payment" id="payment" class="form-control">
                 {% for method in paymentMethods %}
+                {% if method.name is same as currMethod %}
+                <option selected>{{ method.name }}</option>
+                {% else %}
                 <option>{{ method.name }}</option>
+                {% endif %}
                 {% endfor %}
               </select>
             </div>
@@ -51,7 +75,11 @@
               <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
               <select name="category" id="category" class="form-control">
                 {% for category in categories %}
+                {% if category.name is same as currCategory %}
+                <option selected>{{ category.name }}</option>
+                {% else %}
                 <option>{{ category.name }}</option>
+                {% endif %}
                 {% endfor %}
               </select>
             </div>
@@ -62,7 +90,7 @@
           <div class="col-sm-8">
             <div class="input-group">
               <div class="input-group-prepend"><span class="input-group-text"><i class="far fa-comment"></i></span></div>
-              <textarea class="form-control" id="comment" name="comment"></textarea>
+              <textarea class="form-control" id="comment" name="comment">{{currComment}}</textarea>
             </div>
 
           </div>

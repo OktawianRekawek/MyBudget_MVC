@@ -118,4 +118,36 @@ class Profile extends Authenticated
       ]);
     }
   }
+  
+    /**
+   * Add expense to database
+   *
+   * @return void
+   */
+  public function createExpenseAction()
+  {
+    if ($this->user->addExpense($_POST)) {
+      
+      View::renderTemplate('Profile/expenses.html', [
+        'success' => 'Wydatek został dodany!',
+        'user' => $this->user,
+        'currentDate' => date('Y-m-d'),
+        'categories' => User::getExpensesCategories($this->user->id),
+        'paymentMethods' => User::getPaymentMethods($this->user->id)
+      ]);
+
+    } else {
+      
+      View::renderTemplate('Profile/expenses.html', [
+        'error' => 'Wpisz prawidłową kwotę!',
+        'user' => $this->user,
+        'currentDate' => $_POST['date'],
+        'categories' => User::getExpensesCategories($this->user->id),
+        'paymentMethods' => User::getPaymentMethods($this->user->id),
+        'currCategory' => $_POST['category'],
+        'currComment' => $_POST['comment'],
+        'currAmount' => $_POST['amount']
+      ]);
+    }
+  }
 }

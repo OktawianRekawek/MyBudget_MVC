@@ -622,4 +622,46 @@ class User extends \Core\Model
     
     return $stmt->fetchAll();
   }
+  
+  public function addExpense($data)
+  {
+    $amount = $data['amount'];
+    $selectedCategory = $data['category'];
+    $selectedPayMethod = $data['payment'];
+    
+    if (preg_match("/^[0-9]+(\,[0-9]{2})?$/", $amount)) {
+      
+      $correctAmount = str_replace(',','.',$amount);
+      
+      $sql = "SELECT id FROM expenses_category_assigned_to_users WHERE user_id = '$this->id' AND name = '$selectedCategory'";
+      
+      $db = static::getDB();
+      $stmt = $db->prepare($sql);
+    
+      $stmt->execute();
+
+      $categoryId = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+      
+      $sql = "SELECT id FROM payment_methods_assigned_to_users WHERE user_id = '$this->id' AND name = '$selectedPayMethod'";
+      
+      $db = static::getDB();
+      $stmt = $db->prepare($sql);
+    
+      $stmt->execute();
+
+      $paymentId = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+      
+      $sql = 'INSERT INTO expenses VALUES (NULL, :userid, :categoryId, :paymentId, :amount, :date, :desc)';
+      $stmt = $db->prepare($sql);
+      
+      $stmt->bindValue(':userid', $this->id, PDO::PARAM_INT);
+      $stmt->bindValue(':date', $data['date'], PDO::PARAM_STR);
+      $stmt->bindValue(':amount', $correctAmount, PDO::PARAM_STR);
+      $stmt->bindValue(':categoryId', $categoryId[0], PDO::PARAM_INT);
+      $stmt->bindValue(':paymentId', $paymentId[0], PDO::PARAM_INT);
+      $stmt->bindValue(':desc', $data['comment'], PDO::PARAM_STR);
+      return $stmt->execute();
+    }
+    return false;
+  }
 }
