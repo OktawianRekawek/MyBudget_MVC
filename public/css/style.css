@@ -75,3 +75,7 @@ body {
   color: red;
   margin-bottom: 0;
 }
+
+.err-amount {
+  box-shadow: 0 0 1em red;
+}

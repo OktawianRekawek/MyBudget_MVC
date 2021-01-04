@@ -5,6 +5,7 @@ namespace App\Controllers;
 use \Core\View;
 use \App\Auth;
 use \App\Flash;
+use \App\Models\User;
 
 /**
  * Profile controller
@@ -25,15 +26,17 @@ class Profile extends Authenticated
   }
   
   /**
-   * Show the profile
+   * Show addincome page
    *
    * @return void
    */
-  public function showAction()
+  public function addIncomeAction()
   {
-    View::renderTemplate('Profile/show.html', [
-      'user' => $this->user
-    ]);
+    View::renderTemplate('Profile/incomes.html', [
+        'user' => $this->user,
+        'currentDate' => date('Y-m-d'),
+        'categories' => User::getIncomeCategories($this->user->id)
+      ]);
   }
   
   /**
@@ -68,6 +71,36 @@ class Profile extends Authenticated
         'user' => $this->user
       ]);
       
+    }
+  }
+  
+  /**
+   * Add income to database
+   *
+   * @return void
+   */
+  public function createIncomeAction()
+  {
+    if ($this->user->addIncome($_POST)) {
+      
+      View::renderTemplate('Profile/incomes.html', [
+        'success' => 'Przychód został dodany!',
+        'user' => $this->user,
+        'currentDate' => date('Y-m-d'),
+        'categories' => User::getIncomeCategories($this->user->id)
+      ]);
+
+    } else {
+      
+      View::renderTemplate('Profile/incomes.html', [
+        'error' => 'Wpisz prawidłową kwotę!',
+        'user' => $this->user,
+        'currentDate' => $_POST['date'],
+        'categories' => User::getIncomeCategories($this->user->id),
+        'currCategory' => $_POST['category'],
+        'currComment' => $_POST['comment'],
+        'currAmount' => $_POST['amount']
+      ]);
     }
   }
 }
