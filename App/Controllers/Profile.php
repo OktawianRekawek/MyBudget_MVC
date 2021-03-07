@@ -55,13 +55,13 @@ class Profile extends Authenticated
   }
   
   /**
-   * Show the form for editing the profile
+   * Show the settings page
    *
    * @return void
    */
-  public function editAction()
+  public function settingsAction()
   {
-    View::renderTemplate('Profile/edit.html', [
+    View::renderTemplate('Profile/settings.html', [
       'user' => $this->user
     ]);
   }

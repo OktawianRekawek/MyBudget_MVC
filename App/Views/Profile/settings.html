@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}MyBudget - Ustawienia{% endblock %}
+
+{% block body %}
+
+<main class="container my-3">
+  {% if success %}
+  <div class="row addExpense">
+    <div class="col-md-8 col-lg-6 mx-auto bg-success text-center text-uppercase text-light py-2 mb-1">
+      <h2 class="h2 mb-0">{{success}}</h2>
+    </div>
+  </div>
+  {% elseif error %}
+  <div class="row addExpense">
+    <div class="col-md-8 col-lg-6 mx-auto bg-danger text-center text-uppercase text-light py-2 mb-1">
+      <h2 class="h2 mb-0">{{error}}</h2>
+    </div>
+  </div>
+  {% endif %}
+  <div class="row addExpense">
+    <header class="col-md-8 col-lg-6 mx-auto bg-sea text-center text-uppercase text-light py-2">
+      <h1 class="h2 mb-0">Ustawienia</h1>
+    </header>
+    <div class="w-100"></div>
+    <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
+      <div class="col-sm-12 mb-3">
+        <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold">Kategorie przychodów</button>
+      </div>
+      <div class="col-sm-12 my-3">
+        <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold">Kategorie wydatków</button>
+      </div>
+      <div class="col-sm-12 my-3">
+        <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold">Metody płatności</button>
+      </div>
+      <div class="col-sm-12 mt-3">
+        <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold">Użytkownik</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock %}
