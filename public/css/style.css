@@ -79,3 +79,12 @@ body {
 .err-amount {
   box-shadow: 0 0 1em red;
 }
+
+#incomes-categories {
+  display: none;
+  width: 100%;
+}
+
+.income-category {
+  background-color: #6c757d;
+}

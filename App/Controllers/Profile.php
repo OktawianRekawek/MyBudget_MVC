@@ -218,4 +218,16 @@ class Profile extends Authenticated
       ]);
     
   }
+  
+  /**
+   * Show Incomes Categories
+   *
+   * @return void
+   */
+  public function showIncomesCategoriesAction()
+  {
+    $categories = User::getIncomeCategories($this->user->id);
+    
+    echo json_encode($categories);
+  }
 }

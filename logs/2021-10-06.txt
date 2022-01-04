@@ -1,0 +1,4 @@
+[06-Oct-2021 15:21:52 Europe/Berlin] Uncaught exception: 'Exception' with message 'Controller class App\Controllers\Posts not found'
+Stack trace: #0 C:\xampp\htdocs\mybudget_mvc\public\index.php(32): Core\Router->dispatch('posts/index')
+#1 {main}
+Thrown in 'C:\xampp\htdocs\mybudget_mvc\Core\Router.php' on line 130
