@@ -545,7 +545,7 @@ class User extends \Core\Model
    */
   public static function getIncomeCategories($id)
   {
-    $sql = 'SELECT name, amount FROM incomes_category_assigned_to_users WHERE user_id = :id';
+    $sql = 'SELECT name, limited, amount FROM incomes_category_assigned_to_users WHERE user_id = :id';
     
     $db = static::getDB();
     $stmt = $db->prepare($sql);
