@@ -545,7 +545,7 @@ class User extends \Core\Model
    */
   public static function getIncomeCategories($id)
   {
-    $sql = 'SELECT name, limited, amount FROM incomes_category_assigned_to_users WHERE user_id = :id';
+    $sql = 'SELECT id, name, limited, amount FROM incomes_category_assigned_to_users WHERE user_id = :id';
     
     $db = static::getDB();
     $stmt = $db->prepare($sql);
@@ -711,4 +711,37 @@ class User extends \Core\Model
     $incomes = $stmt->fetchAll();
     return $incomes;
   }
+
+  public static function saveIncomeSettings($data)
+  {
+    $id = $data['id'];
+    $name = $data['name'];
+    $amount = $data['amount'];
+    $limited = $data['limited'];
+    
+    
+    $file = 'dbg.txt';
+    file_put_contents($file, $amount);
+
+    if (preg_match("/^[0-9]+([\,\.][0-9]{2})?$/", $amount) || $amount == NULL) {
+      
+      $correctAmount = str_replace(',','.',$amount);
+      $sql = "UPDATE incomes_category_assigned_to_users SET name=:name, limited=:limited, amount=:amount WHERE id = :id";
+      
+
+      $db = static::getDB();
+      $stmt = $db->prepare($sql);
+      
+      $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+      $stmt->bindValue(':amount', $correctAmount, PDO::PARAM_STR);
+      $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+      $stmt->bindValue(':limited', $limited, PDO::PARAM_INT);
+      return $stmt->execute();
+    }else{
+      $file = 'dbg.txt';
+    file_put_contents($file, "dupa");
+    }
+    // return false;
 }
+}
+

@@ -224,10 +224,21 @@ class Profile extends Authenticated
    *
    * @return void
    */
-  public function showIncomesCategoriesAction()
+  public function getIncomesCategoriesAction()
   {
     $categories = User::getIncomeCategories($this->user->id);
     
     echo json_encode($categories);
+  }
+
+  /**
+   * Save Income Category Settings
+   * 
+   * @return void
+   */
+  
+  public function saveIncomeCategorySettingsAction()
+  {
+    User::saveIncomeSettings($_POST);
   }
 }

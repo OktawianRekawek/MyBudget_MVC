@@ -29,7 +29,7 @@
   </div>
 </main>
 
-<div class="modal fade" id="categorySettingsModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="incomeSettingsModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -39,13 +39,13 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="">
+        <form>
           <div class="form-group row justify-content-center">
             <label for="name" class="col-sm-3 col-form-label">Nazwa</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
-                <input type="text" class="form-control" id="categoryName" name="name" value="">
+                <input type="text" class="form-control" id="categoryName" name="name">
               </div>
             </div>
           </div>
@@ -58,14 +58,15 @@
               </div>
               <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="limitCheck">
-                <label class="form-check-label" for="limitCheck">Włącz limit</label>
+                <label class="form-check-label" for="limitCheck">Ustal cel</label>
               </div>
             </div>
           </div>
+          <input type="text" id="categoryId" hidden>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Zapisz</button>
+        <button type="button" class="btn btn-primary" id="saveSettings">Zapisz</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
       </div>
     </div>
