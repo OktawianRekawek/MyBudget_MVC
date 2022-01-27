@@ -13,11 +13,12 @@
     <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
       <div class="col-sm-12 mb-3">
         <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold" id="incomes-category-toggle">Kategorie przychodów</button>
-        <div id="incomes-categories" class="rounded-bottom incomes-categories row mx-auto">
+        <div id="incomes-categories" class="rounded-bottom categories-list row mx-auto">
         </div>
       </div>
       <div class="col-sm-12 my-3">
-        <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold">Kategorie wydatków</button>
+        <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold" id="expenses-category-toggle">Kategorie wydatków</button>
+        <div id="expenses-categories" class="rounded-bottom categories-list row mx-auto"></div>
       </div>
       <div class="col-sm-12 my-3">
         <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold">Metody płatności</button>
@@ -29,7 +30,7 @@
   </div>
 </main>
 
-<div class="modal fade" id="incomeSettingsModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -58,7 +59,7 @@
               </div>
               <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="limitCheck">
-                <label class="form-check-label" for="limitCheck">Ustal cel</label>
+                <label class="form-check-label" for="limitCheck"></label>
               </div>
             </div>
           </div>

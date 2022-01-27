@@ -232,13 +232,28 @@ class Profile extends Authenticated
   }
 
   /**
+   * Show Expenses Categories
+   *
+   * @return void
+   */
+  public function getExpensesCategoriesAction()
+  {
+    $categories = User::getExpensesCategories($this->user->id);
+    
+    echo json_encode($categories);
+  }
+
+  /**
    * Save Income Category Settings
    * 
    * @return void
    */
   
-  public function saveIncomeCategorySettingsAction()
+  public function saveCategorySettingsAction()
   {
-    User::saveIncomeSettings($_POST);
+    if (!strcmp($_POST['category'], 'income'))
+      User::saveIncomeSettings($_POST);
+    else if (!strcmp($_POST['category'], 'expense'))
+      User::saveExpenseSettings($_POST);
   }
 }

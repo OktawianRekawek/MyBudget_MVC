@@ -612,7 +612,7 @@ class User extends \Core\Model
    */
   public static function getExpensesCategories($id)
   {
-    $sql = 'SELECT name FROM expenses_category_assigned_to_users WHERE user_id = :id';
+    $sql = 'SELECT id, name, limited, amount FROM expenses_category_assigned_to_users WHERE user_id = :id';
     
     $db = static::getDB();
     $stmt = $db->prepare($sql);
@@ -718,10 +718,6 @@ class User extends \Core\Model
     $name = $data['name'];
     $amount = $data['amount'];
     $limited = $data['limited'];
-    
-    
-    $file = 'dbg.txt';
-    file_put_contents($file, $amount);
 
     if (preg_match("/^[0-9]+([\,\.][0-9]{2})?$/", $amount) || $amount == NULL) {
       
@@ -737,11 +733,33 @@ class User extends \Core\Model
       $stmt->bindValue(':id', $id, PDO::PARAM_INT);
       $stmt->bindValue(':limited', $limited, PDO::PARAM_INT);
       return $stmt->execute();
-    }else{
-      $file = 'dbg.txt';
-    file_put_contents($file, "dupa");
     }
-    // return false;
-}
+    return false;
+  }
+
+  public static function saveExpenseSettings($data)
+  {
+    $id = $data['id'];
+    $name = $data['name'];
+    $amount = $data['amount'];
+    $limited = $data['limited'];
+
+    if (preg_match("/^[0-9]+([\,\.][0-9]{2})?$/", $amount) || $amount == NULL) {
+      
+      $correctAmount = str_replace(',','.',$amount);
+      $sql = "UPDATE expenses_category_assigned_to_users SET name=:name, limited=:limited, amount=:amount WHERE id = :id";
+      
+
+      $db = static::getDB();
+      $stmt = $db->prepare($sql);
+      
+      $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+      $stmt->bindValue(':amount', $correctAmount, PDO::PARAM_STR);
+      $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+      $stmt->bindValue(':limited', $limited, PDO::PARAM_INT);
+      return $stmt->execute();
+    }
+    return false;
+  }
 }
 
