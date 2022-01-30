@@ -737,6 +737,30 @@ class User extends \Core\Model
     return false;
   }
 
+  public function addIncomeCategory($data)
+  {
+    $name = $data['name'];
+    $amount = $data['amount'];
+    $limited = $data['limited'];
+
+    if (preg_match("/^[0-9]+([\,\.][0-9]{2})?$/", $amount) || $amount == NULL) {
+      
+      $correctAmount = str_replace(',','.',$amount);
+      $sql = 'INSERT INTO incomes_category_assigned_to_users VALUES (NULL, :userid, :name, :limited, :amount)';
+      
+
+      $db = static::getDB();
+      $stmt = $db->prepare($sql);
+      
+      $stmt->bindValue(':userid', $this->id, PDO::PARAM_INT);
+      $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+      $stmt->bindValue(':limited', $limited, PDO::PARAM_INT);
+      $stmt->bindValue(':amount', $correctAmount, PDO::PARAM_STR);
+      return $stmt->execute();
+    }
+    return false;
+  }
+
   public static function saveExpenseSettings($data)
   {
     $id = $data['id'];
@@ -760,6 +784,20 @@ class User extends \Core\Model
       return $stmt->execute();
     }
     return false;
+  }
+
+  public static function getLastId()
+  {
+    
+      $sql = "SELECT MAX(id) FROM `incomes_category_assigned_to_users`";
+      
+
+      $db = static::getDB();
+      $stmt = $db->prepare($sql);
+      $stmt->execute();
+      $id = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+      // file_put_contents("dbg.txt", $id);
+      return $id;
   }
 }
 
