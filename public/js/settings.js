@@ -65,27 +65,61 @@ var getExpensesCategories = function () {
   });
 }
 
+var getPaymentMethodsCategories = function () {
+  $.ajax({
+    url: "/Profile/getPaymentMethodsCategories",
+    type: "POST",
+    dataType: 'json',
+    success: function (response) {
+      var categories = response;
+      var category;
+      var categoryName;
+      
+      categories.forEach(function (item, index) {
+        categoryName = item.name;
+        categoryId = item.id;
+        category = `<button type="button" class="btn btn-primary payment-category row mx-auto col-sm-12 my-1 rounded justify-content-between" id="settingsModalBtn" data-category="payment" data-id="${categoryId}" data-name="${categoryName}">${categoryName}`;
+        category += `</button>`;
+        $('#payment-categories').append(category);
+        
+      });
+
+      var addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between addCatModalBtn" data-category="payment">Dodaj kategorię</button>`;
+      $('#payment-categories').append(addCategoryBtn);
+    }
+  });
+}
+
 var changeCategorySettings = function (property) {
-  var categoryName = $(property).data('name') ;
-  var categoryLimitAmount = $(property).data('amount') ;
-  var categoryLimited = $(property).data('limit') ;
-  var categoryId = $(property).data('id') ;
+  var categoryName = $(property).data('name');
+  var categoryId = $(property).data('id');
+
   $('#categoryName').val(categoryName);
-  $('#limitAmount').val(categoryLimitAmount);
   $('#categoryId').val( categoryId);
 
-  if ($(property).data('category') == 'income')
-    $('.form-check-label').html('Ustal cel');
-  else if ($(property).data('category') == 'expense')
-    $('.form-check-label').html('Ustal limit'); 
+  if ($(property).data('category') != 'payment') {
+    var categoryLimitAmount = $(property).data('amount');
+    var categoryLimited = $(property).data('limit');
+    
+    $('#limitAmount').val(categoryLimitAmount);
+  
+    $('.category-amount').removeClass("hidden");
 
-  if (categoryLimited)
-  {
-    $('#limitCheck').prop('checked', true);
-    $("#limitAmount").removeAttr("disabled");
+    if ($(property).data('category') == 'income')
+      $('.form-check-label').html('Ustal cel');
+    else if ($(property).data('category') == 'expense')
+      $('.form-check-label').html('Ustal limit'); 
+
+    if (categoryLimited)
+    {
+      $('#limitCheck').prop('checked', true);
+      $("#limitAmount").removeAttr("disabled");
+    } else {
+      $('#limitCheck').prop('checked', false);
+      $("#limitAmount").attr("disabled", "disabled");
+    }
   } else {
-    $('#limitCheck').prop('checked', false);
-    $("#limitAmount").attr("disabled", "disabled");
+    $('.category-amount').addClass("hidden");
   }
   $("#modalLabel").html("Ustawienia kategorii");
 
@@ -100,11 +134,16 @@ var showAddCategoryModal = function(property) {
 
     $("#modalLabel").html("Dodaj kategorię");
     $('#categoryName').val("");
+    $('#categoryId').val(null);
+  if ($(property).data('category') != 'payment') {
+    $('.category-amount').removeClass("hidden");
     $('#limitAmount').val("");
     $("#limitAmount").attr("disabled", "disabled");
     $('#limitCheck').prop('checked', false);
-    $('#categoryId').val(null);
-
+  } else {
+    $('.category-amount').addClass("hidden");
+  }
+    
     $("#settingsModal").modal('show').data('category', $(property).data('category'));
 }
 
@@ -141,10 +180,16 @@ var saveSettings = function () {
           element.html(`${categoryName}<br>${text}: ${categoryLimitAmount} zł`);
         else
           element.html(`${categoryName}`);
-        element.data('name', categoryName).data('amount', categoryLimitAmount).data('limit', categoryLimited);
+        element.data('name', categoryName);
+        if (categoryType != 'payment')
+          element.data('amount', categoryLimitAmount).data('limit', categoryLimited);
       } else {
         categoryId = result.responseJSON[0];
-        category = `<button type="button" class="btn btn-primary ${categoryType}-category row mx-auto col-sm-12 my-1 rounded justify-content-between" id="settingsModalBtn" data-category="${categoryType}" data-id="${categoryId}" data-name="${categoryName}" data-amount="${categoryLimitAmount}" data-limit="${categoryLimited}">${categoryName}`;
+        category = `<button type="button" class="btn btn-primary ${categoryType}-category row mx-auto col-sm-12 my-1 rounded justify-content-between" id="settingsModalBtn" data-category="${categoryType}" data-id="${categoryId}" data-name="${categoryName}"`;
+        if (categoryType != 'payment') {
+          category += ` data-amount="${categoryLimitAmount}" data-limit="${categoryLimited}"`;
+        }
+        category += `>${categoryName}`;
         if (categoryLimited==1)
           category += `<br>Cel: ${categoryLimitAmount} zł`;
         category += `</button>`;
@@ -156,22 +201,40 @@ var saveSettings = function () {
   });
 }
 
-$(document).ready(function () {
-
-  getIncomesCategories();
-  getExpensesCategories();
+var chooseSettingsCategory = function () {
 
   $("#incomes-category-toggle").click(function () {
     slideItem("#incomes-categories");
     if ($('#expenses-categories').css('display') == 'block')
       slideItem("#expenses-categories");
+    if ($('#payment-categories').css('display') == 'block')
+      slideItem("#payment-categories");
   });
 
   $("#expenses-category-toggle").click(function () {
     slideItem("#expenses-categories");
     if ($('#incomes-categories').css('display') == 'block')
       slideItem("#incomes-categories");
+    if ($('#payment-categories').css('display') == 'block')
+      slideItem("#payment-categories");
   });
+
+  $("#payment-category-toggle").click(function () {
+    slideItem("#payment-categories");
+    if ($('#expenses-categories').css('display') == 'block')
+      slideItem("#expenses-categories");
+    if ($('#incomes-categories').css('display') == 'block')
+      slideItem("#incomes-categories");
+  });
+}
+
+$(document).ready(function () {
+
+  getIncomesCategories();
+  getExpensesCategories();
+  getPaymentMethodsCategories();
+
+  chooseSettingsCategory();
 
   $(".categories-list").on('click', "#settingsModalBtn", function () {
     changeCategorySettings(this);
@@ -198,5 +261,11 @@ $(document).ready(function () {
   $("#settingsModal").on('hidden.bs.modal', function () {
     $('.chosen').removeClass('chosen');
   });
+
+  $("#settingsModal").on('shown.bs.modal', function () {
+    $('#categoryName').focus();
+  });
+  
+  
 
 });

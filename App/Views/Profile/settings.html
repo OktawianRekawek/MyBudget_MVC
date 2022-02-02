@@ -12,16 +12,17 @@
     <div class="w-100"></div>
     <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
       <div class="col-sm-12 mb-3">
-        <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold" id="incomes-category-toggle">Kategorie przychodów</button>
+        <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold categories-toggle" id="incomes-category-toggle">Kategorie przychodów</button>
         <div id="incomes-categories" class="rounded-bottom categories-list row mx-auto">
         </div>
       </div>
       <div class="col-sm-12 my-3">
-        <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold" id="expenses-category-toggle">Kategorie wydatków</button>
+        <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold categories-toggle" id="expenses-category-toggle">Kategorie wydatków</button>
         <div id="expenses-categories" class="rounded-bottom categories-list row mx-auto"></div>
       </div>
       <div class="col-sm-12 my-3">
-        <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold">Metody płatności</button>
+        <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold categories-toggle" id="payment-category-toggle">Metody płatności</button>
+        <div id="payment-categories" class="rounded-bottom categories-list row mx-auto"></div>
       </div>
       <div class="col-sm-12 mt-3">
         <button type="button" class="btn btn-block btn-info btn-lg font-weight-bold">Użytkownik</button>
@@ -50,7 +51,7 @@
               </div>
             </div>
           </div>
-          <div class="form-group row justify-content-center">
+          <div class="form-group row justify-content-center category-amount">
             <label for="amount" class="col-sm-3 col-form-label">Kwota</label>
             <div class="col-sm-8">
               <div class="input-group">

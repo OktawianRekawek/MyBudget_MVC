@@ -244,6 +244,18 @@ class Profile extends Authenticated
   }
 
   /**
+   * Show Payment Methods Categories
+   *
+   * @return void
+   */
+  public function getPaymentMethodsCategoriesAction()
+  {
+    $categories = User::getPaymentMethods($this->user->id);
+    
+    echo json_encode($categories);
+  }
+
+  /**
    * Save Income Category Settings
    * 
    * @return void
@@ -256,7 +268,7 @@ class Profile extends Authenticated
       if ($_POST['id'] == NULL)
       {
         $this->user->addIncomeCategory($_POST);
-        $lastid = User::getLastId();
+        $lastid = User::getLastId("incomes_category_assigned_to_users");
        // file_put_contents("dbg.txt", $lastid);
        echo json_encode($lastid);
       }
@@ -268,12 +280,25 @@ class Profile extends Authenticated
       if ($_POST['id'] == NULL)
       {
         $this->user->addExpenseCategory($_POST);
-        $lastid = User::getLastId();
+        $lastid = User::getLastId("expenses_category_assigned_to_users");
         // file_put_contents("dbg.txt", $lastid);
        echo json_encode($lastid);
       }
       else
-        User::saveExpenseSettings($_POST);}
+        User::saveExpenseSettings($_POST);
+    }
+    else if (!strcmp($_POST['category'], 'payment')) 
+    {
+      if ($_POST['id'] == NULL)
+      {
+        $this->user->addPaymentCategory($_POST);
+        $lastid = User::getLastId("payment_methods_assigned_to_users");
+        // file_put_contents("dbg.txt", $lastid);
+       echo json_encode($lastid);
+      }
+      else
+        User::savePaymentSettings($_POST);
+    }
       
   }
 }

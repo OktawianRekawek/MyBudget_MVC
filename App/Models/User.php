@@ -594,7 +594,7 @@ class User extends \Core\Model
    */
   public static function getPaymentMethods($id)
   {
-    $sql = 'SELECT name FROM payment_methods_assigned_to_users WHERE user_id = :id';
+    $sql = 'SELECT id, name FROM payment_methods_assigned_to_users WHERE user_id = :id';
     
     $db = static::getDB();
     $stmt = $db->prepare($sql);
@@ -810,10 +810,41 @@ class User extends \Core\Model
     return false;
   }
 
-  public static function getLastId()
+  public static function savePaymentSettings($data)
+  {
+    $id = $data['id'];
+    $name = $data['name'];
+
+    $sql = "UPDATE payment_methods_assigned_to_users SET name=:name WHERE id = :id";
+    
+
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+    
+    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    return $stmt->execute();
+  }
+
+  public function addPaymentCategory($data)
+  {
+    $name = $data['name'];
+
+    $sql = 'INSERT INTO payment_methods_assigned_to_users VALUES (NULL, :userid, :name)';
+    
+
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+    
+    $stmt->bindValue(':userid', $this->id, PDO::PARAM_INT);
+    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+    return $stmt->execute();
+  }
+
+  public static function getLastId($tableName)
   {
     
-      $sql = "SELECT MAX(id) FROM `incomes_category_assigned_to_users`";
+      $sql = "SELECT MAX(id) FROM $tableName";
       
 
       $db = static::getDB();
