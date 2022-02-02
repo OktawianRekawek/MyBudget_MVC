@@ -28,7 +28,7 @@ var getIncomesCategories = function () {
         
       });
 
-      var addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between" id="addCatModalBtn" data-category="income">Dodaj kategorię</button>`;
+      var addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between addCatModalBtn" data-category="income">Dodaj kategorię</button>`;
       $('#incomes-categories').append(addCategoryBtn);
     }
   });
@@ -59,7 +59,7 @@ var getExpensesCategories = function () {
         
       });
 
-      var addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between" id="addCatModalBtn" data-category="expense">Dodaj kategorię</button>`;
+      var addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between addCatModalBtn" data-category="expense">Dodaj kategorię</button>`;
       $('#expenses-categories').append(addCategoryBtn);
     }
   });
@@ -144,11 +144,11 @@ var saveSettings = function () {
         element.data('name', categoryName).data('amount', categoryLimitAmount).data('limit', categoryLimited);
       } else {
         categoryId = result.responseJSON[0];
-        category = `<button type="button" class="btn btn-primary income-category row mx-auto col-sm-12 my-1 rounded justify-content-between" id="settingsModalBtn" data-category="income" data-id="${categoryId}" data-name="${categoryName}" data-amount="${categoryLimitAmount}" data-limit="${categoryLimited}">${categoryName}`;
+        category = `<button type="button" class="btn btn-primary ${categoryType}-category row mx-auto col-sm-12 my-1 rounded justify-content-between" id="settingsModalBtn" data-category="${categoryType}" data-id="${categoryId}" data-name="${categoryName}" data-amount="${categoryLimitAmount}" data-limit="${categoryLimited}">${categoryName}`;
         if (categoryLimited==1)
           category += `<br>Cel: ${categoryLimitAmount} zł`;
         category += `</button>`;
-        $('#addCatModalBtn').before(category);
+        $(`.addCatModalBtn:visible`).before(category);
       }
 
         $("#settingsModal").modal('hide');
@@ -178,7 +178,7 @@ $(document).ready(function () {
     $(this).addClass("chosen");
   });
 
-  $(".categories-list").on('click', '#addCatModalBtn', function() {
+  $(".categories-list").on('click', '.addCatModalBtn', function() {
     showAddCategoryModal(this);
   });
 

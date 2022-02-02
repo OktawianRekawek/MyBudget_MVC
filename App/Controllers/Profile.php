@@ -251,16 +251,29 @@ class Profile extends Authenticated
   
   public function saveCategorySettingsAction()
   {
-    if (!strcmp($_POST['category'], 'income'))
-      if ($_POST['id'] == NULL){
+    if (!strcmp($_POST['category'], 'income')) 
+    {
+      if ($_POST['id'] == NULL)
+      {
         $this->user->addIncomeCategory($_POST);
         $lastid = User::getLastId();
-        // file_put_contents("dbg.txt", $lastid);
-        echo json_encode($lastid);
+       // file_put_contents("dbg.txt", $lastid);
+       echo json_encode($lastid);
       }
       else
         User::saveIncomeSettings($_POST);
-    else if (!strcmp($_POST['category'], 'expense'))
-      User::saveExpenseSettings($_POST);
+    }
+    else if (!strcmp($_POST['category'], 'expense')) 
+    {
+      if ($_POST['id'] == NULL)
+      {
+        $this->user->addExpenseCategory($_POST);
+        $lastid = User::getLastId();
+        // file_put_contents("dbg.txt", $lastid);
+       echo json_encode($lastid);
+      }
+      else
+        User::saveExpenseSettings($_POST);}
+      
   }
 }
