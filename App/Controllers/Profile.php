@@ -131,7 +131,8 @@ class Profile extends Authenticated
       View::renderTemplate('Profile/expenses.html', [
         'success' => 'Wydatek został dodany!',
         'user' => $this->user,
-        'currentDate' => date('Y-m-d'),
+        'currentDate' => $_POST['date'],
+        'currCategory' => $_POST['category'],
         'categories' => User::getExpensesCategories($this->user->id),
         'paymentMethods' => User::getPaymentMethods($this->user->id)
       ]);
@@ -149,6 +150,13 @@ class Profile extends Authenticated
         'currAmount' => $_POST['amount']
       ]);
     }
+  }
+
+  public function getExpensesAction()
+  {
+    $expenses = $this->user->getExpenses($_POST['startDate'],$_POST['endDate']);
+    
+    echo json_encode($expenses);
   }
   
    /**
@@ -194,11 +202,11 @@ class Profile extends Authenticated
     $incomesSum = 0;
     
     foreach ($expenses as $expense) {
-      $expensesSum += $expense['amount'];
+      $expensesSum += $expense['amountSum'];
     }
     
     foreach ($incomes as $income) {
-      $incomesSum += $income['amount'];
+      $incomesSum += $income['amountSum'];
     }
     
     $balance = $incomesSum - $expensesSum;

@@ -40,6 +40,7 @@ class View
    */
   public static function renderTemplate($template, $args = [])
   {
+    $_POST= array();
     echo static::getTemplate($template, $args);
   }
     /**

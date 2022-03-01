@@ -667,7 +667,7 @@ class User extends \Core\Model
   
   public function getExpenses($startDate, $endDate)
   {
-    $sql = "SELECT c.name, SUM(amount) as amount
+    $sql = "SELECT c.name, SUM(e.amount) as amountSum
             FROM expenses_category_assigned_to_users as c, expenses as e, users as u
             WHERE c.user_id=:userid
             AND c.id = e.expense_category_assigned_to_user_id
@@ -690,7 +690,7 @@ class User extends \Core\Model
   
   public function getIncomes($startDate, $endDate)
   {
-    $sql = "SELECT c.name, SUM(amount) as amount
+    $sql = "SELECT c.name, SUM(i.amount) as amountSum
             FROM incomes_category_assigned_to_users as c, incomes as i, users as u
             WHERE c.user_id=:userid
             AND c.id = i.income_category_assigned_to_user_id
