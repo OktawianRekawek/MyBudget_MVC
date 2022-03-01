@@ -24,6 +24,10 @@
       <h1 class="h2 mb-0">Dodaj przychód</h1>
     </header>
     <div class="w-100"></div>
+    <div class= "col-md-8 col-lg-6 mx-auto text-center text-light py-0 container">
+      <div class="check-limit row"></div>
+    </div>
+    <div class="w-100"></div>
     <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
       <form method="post" action="/profile/createIncome">
         <div class="form-group row justify-content-center">
@@ -60,9 +64,9 @@
               <select name="category" id="category" class="form-control">
                 {% for category in categories %}
                 {% if category.name is same as currCategory %}
-                <option selected>{{ category.name }}</option>
+                <option selected data-limit="{{ category.amount }}" data-limited="{{ category.limited }}" class="category-option">{{ category.name }}</option>
                 {% else %}
-                <option>{{ category.name }}</option>
+                <option data-limit="{{ category.amount }}" data-limited="{{ category.limited }}" class="category-option">{{ category.name }}</option>
                 {% endif %}
                 {% endfor %}
               </select>
@@ -86,4 +90,8 @@
   </div>
 </main>
 
+{% endblock %}
+
+{% block script%}
+<script src="/js/incomes.js"></script>
 {% endblock %}

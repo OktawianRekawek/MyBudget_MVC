@@ -1,6 +1,6 @@
 var currentDate = new Date();
 
-var expenses = new Array();
+var incomes = new Array();
 
 var firstDayOfMonth = makeDate(currentDate.getFullYear(), currentDate.getMonth(), 1);
 var lastDayOfMonth = makeDate(currentDate.getFullYear(), currentDate.getMonth()+1, 0);
@@ -21,11 +21,11 @@ function formatDate(year, month, day) {
   return stringDate;
 }
 
-function getExpenses () {
+function getIncomes () {
 
 
   $.ajax({
-    url: "/Profile/getExpenses",
+    url: "/Profile/getIncomes",
     type: "POST",
     dataType: 'json',
     data: {
@@ -34,7 +34,7 @@ function getExpenses () {
     },
     success: function (response) {
       response.forEach(element => {
-        expenses.push(element);
+        incomes.push(element);
       });
     },
     async: false
@@ -42,10 +42,10 @@ function getExpenses () {
 
 }
 
-function getSpendAmount(categoryName) {
+function getIncomesAmount(categoryName) {
   
   var amount;
-  expenses.forEach(element => {
+  incomes.forEach(element => {
     if (categoryName == element.name)
     {
       amount = element.amountSum;
@@ -62,38 +62,38 @@ function initSummary() {
 
     var limit = parseFloat($(".category-option:selected").data("limit"));
     var category = $("#category option:selected").val();
-    var spend = parseFloat(getSpendAmount(category));
-    if (isNaN(spend)) {
-      spend = 0;
+    var deposited = parseFloat(getIncomesAmount(category));
+    if (isNaN(deposited)) {
+      deposited = 0;
     }
-    var stayed = limit - spend;
+    var stayed = limit - deposited;
 
-    var divLimit = `<div class="col-3"><p class="font-weight-bold mb-0">Limit:</p><p class="mb-0">${limit.toFixed(2)} zł</p></div>`;
-    var divSpend = `<div class="col-3"><p class="font-weight-bold mb-0">Wydano:</p><p class="mb-0">${spend.toFixed(2)} zł</p></div>`;
-    var divStayed = `<div class="col-3"><p class="font-weight-bold mb-0">Zostało:</p><p class="mb-0">${stayed.toFixed(2)} zł</p></div>`;
-    var divSum = `<div class="col-3"><p class="font-weight-bold mb-0">Suma:</p><p class="mb-0" id="summary">${spend.toFixed(2)} zł</p></div>`;
-    if (stayed <= 0)
-      $(".check-limit").removeClass("bg-success").addClass("bg-danger");
+    var divLimit = `<div class="col-3"><p class="font-weight-bold mb-0">Cel:</p><p class="mb-0">${limit.toFixed(2)} zł</p></div>`;
+    var divDeposit = `<div class="col-3"><p class="font-weight-bold mb-0">Odłożono:</p><p class="mb-0">${deposited.toFixed(2)} zł</p></div>`;
+    var divStayed = `<div class="col-3"><p class="font-weight-bold mb-0">Brakuje:</p><p class="mb-0">${stayed.toFixed(2)} zł</p></div>`;
+    var divSum = `<div class="col-3"><p class="font-weight-bold mb-0">Suma:</p><p class="mb-0" id="summary">${deposited.toFixed(2)} zł</p></div>`;
+    if (deposited < limit)
+      $(".check-limit").removeClass("bg-success").addClass("bg-info");
     else
-      $(".check-limit").removeClass("bg-danger").addClass("bg-success");
-    $(".check-limit").append(divLimit).append(divSpend).append(divStayed).append(divSum);
+      $(".check-limit").removeClass("bg-info").addClass("bg-success");
+    $(".check-limit").append(divLimit).append(divDeposit).append(divStayed).append(divSum);
 
     $("#amount").change(function() {
-      var sum = spend+parseFloat($("#amount").val());
+      var sum = deposited+parseFloat($("#amount").val());
       console.log(sum);
       console.log(limit);
       $("#summary").html(`${sum.toFixed(2)} zł`);
-      if (sum > limit)
-        $(".check-limit").removeClass("bg-success").addClass("bg-danger");
+      if (sum < limit)
+        $(".check-limit").removeClass("bg-success").addClass("bg-info");
       else
-        $(".check-limit").removeClass("bg-danger").addClass("bg-success");
+        $(".check-limit").removeClass("bg-info").addClass("bg-success");
     });
   }
 }
 
 $(document).ready(function () {
 
-  getExpenses();
+  getIncomes();
   initSummary();
 
   $("#category").change(function() {

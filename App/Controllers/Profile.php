@@ -158,6 +158,13 @@ class Profile extends Authenticated
     
     echo json_encode($expenses);
   }
+
+  public function getIncomesAction()
+  {
+    $incomes = $this->user->getIncomes($_POST['startDate'],$_POST['endDate']);
+    
+    echo json_encode($incomes);
+  }
   
    /**
    * Show balance page
