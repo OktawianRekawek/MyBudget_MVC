@@ -103,7 +103,6 @@ class User extends \Core\Model
     }
   }
   
-  
   /**
    * See if a user record already exists with the cpecified email
    *
@@ -854,5 +853,93 @@ class User extends \Core\Model
       // file_put_contents("dbg.txt", $id);
       return $id;
   }
+
+  public function validateName($newName, $currentName)
+  {
+    if ($newName == '') {
+      return 1;
+    } else if(!strcmp($newName, $currentName)) {
+      return 2;
+    }
+    return 0;
+  }
+
+  public function validateEmail($newEmail, $currentEmail)
+  {
+    if (filter_var($newEmail, FILTER_VALIDATE_EMAIL) === false)
+      return 1;
+    if(!strcmp($newEmail, $currentEmail)) 
+      return 2;
+    if (static::emailExists($newEmail))
+      return 3;
+    return 0;
+  }
+
+  public function validatePassword($newPassword)
+  {
+    if (strlen($newPassword) < 6)
+      return 1;
+    if (preg_match('/.*[a-z]+.*/i', $newPassword) == 0)
+      return 2;
+    if (preg_match('/.*\d+.*/i', $newPassword) == 0)
+      return 3;
+    return 0;
+  }
+
+  public function changeUserSettings($data)
+  {
+    $name = $data['name'];
+    $email = $data['email'];
+    $nameFlag = $this->validateName($name, $this->name);
+    if ($nameFlag == 1)
+      return 1;
+    $emailFlag = $this->validateEmail($email, $this->email);
+    if ($emailFlag == 1)
+      return 2;
+    if ($emailFlag == 2 && $nameFlag == 2)
+      return 3;
+    if($emailFlag == 3 && $nameFlag == 2)
+      return 4;
+
+
+    if(!$nameFlag && $emailFlag)
+      $sql = "UPDATE users SET name = :name WHERE id = '$this->id'";
+    if(!$nameFlag && !$emailFlag)
+      $sql = "UPDATE users SET name = :name, email = :email WHERE id = '$this->id'";
+    if(!$emailFlag && $nameFlag)
+      $sql = "UPDATE users SET email = :email WHERE id = '$this->id'";
+
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+    
+    if(!$nameFlag)
+      $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+    if(!$emailFlag)
+      $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+    $stmt->execute();
+
+    return 0;
+  }
+
+  public function changeUserPassword($data)
+  {
+    $password = $data['password'];
+    $ret = $this->validatePassword($password);
+    if ($ret > 0)
+      return $ret;
+
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+    $sql = "UPDATE users SET password_hash = :password_hash WHERE id = '$this->id'";
+
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+    
+    $stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
+    $stmt->execute();
+
+    return 0;
+  }
+  
 }
 

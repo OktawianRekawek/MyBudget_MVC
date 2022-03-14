@@ -209,6 +209,8 @@ var chooseSettingsCategory = function () {
       slideItem("#expenses-categories");
     if ($('#payment-categories').css('display') == 'block')
       slideItem("#payment-categories");
+    if ($('#user-settings').css('display') == 'block')
+        slideItem("#user-settings");
   });
 
   $("#expenses-category-toggle").click(function () {
@@ -217,6 +219,8 @@ var chooseSettingsCategory = function () {
       slideItem("#incomes-categories");
     if ($('#payment-categories').css('display') == 'block')
       slideItem("#payment-categories");
+    if ($('#user-settings').css('display') == 'block')
+        slideItem("#user-settings");
   });
 
   $("#payment-category-toggle").click(function () {
@@ -225,7 +229,101 @@ var chooseSettingsCategory = function () {
       slideItem("#expenses-categories");
     if ($('#incomes-categories').css('display') == 'block')
       slideItem("#incomes-categories");
+    if ($('#user-settings').css('display') == 'block')
+      slideItem("#user-settings");
   });
+
+  $("#user-settings-toggle").click(function () {
+    slideItem("#user-settings");
+    if ($('#expenses-categories').css('display') == 'block')
+      slideItem("#expenses-categories");
+    if ($('#incomes-categories').css('display') == 'block')
+      slideItem("#incomes-categories");
+    if ($('#payment-categories').css('display') == 'block')
+      slideItem("#payment-categories");
+  });
+}
+
+var showUserEditModal = function () {
+  $('#login-input').val($('#login').html());
+  $('#email-input').val($('#email').html());
+  $('#login-form').removeClass("hidden");
+  $('#email-form').removeClass("hidden");
+  $('#password-form').addClass("hidden");
+  $("#userSettingsModal").modal('show');
+}
+
+var showChangePasswordModal = function () {
+  $('#login-form').addClass("hidden");
+  $('#email-form').addClass("hidden");
+  $('#password-form').removeClass("hidden");
+  $("#userSettingsModal").modal('show');
+}
+
+var saveUserSettings = function () {
+  if ($('#login-form').hasClass('hidden')) {
+    $.ajax({
+      url: "/Profile/changeUserSettings",
+      type: "POST",
+      dataType: "json",
+      data: {
+        password: $('#password-input').val()
+      },
+      complete: function (result) {
+          retCode = result.responseJSON;
+          switch (retCode)
+          {
+            case 0:
+              $('#err-message').html("");
+              $("#userSettingsModal").modal('hide');
+              break;
+            case 1:
+              $('#err-message').html("Hasło musi zawierać conajmniej 6 znaków!");
+              break;
+            case 2:
+              $('#err-message').html("Hasło musi zawierać conajmniej jedną literę!");
+              break;
+            case 3:
+              $('#err-message').html("Hasło musi zawierać conajmniej jedną cyfrę!");
+              break;
+          }
+        }
+    });
+  } else {
+    $.ajax({
+      url: "/Profile/changeUserSettings",
+      type: "POST",
+      dataType: "json",
+      data: {
+        name: $('#login-input').val(),
+        email: $('#email-input').val()
+      },
+      complete: function (result) {
+          retCode = result.responseJSON;
+          switch (retCode)
+          {
+            case 0:
+              $('#err-message').html("");
+              $('#login').html($('#login-input').val());
+              $('#email').html($('#email-input').val());
+              $("#userSettingsModal").modal('hide');
+              break;
+            case 1:
+              $('#err-message').html("Nazwa nie może być pusta!");
+              break;
+            case 2:
+              $('#err-message').html("Proszę wpisać poprawny adres email!");
+              break;
+            case 3:
+              $('#err-message').html("Nie wprowadzono żadnych zmian!");
+              break;
+            case 4:
+              $('#err-message').html("Podany adres email jest już używany!");
+              break;
+          }
+        }
+    });
+  }
 }
 
 $(document).ready(function () {
@@ -245,6 +343,14 @@ $(document).ready(function () {
     showAddCategoryModal(this);
   });
 
+  $("#user-settings").on('click', '#userEdit', function() {
+    showUserEditModal();
+  });
+
+  $("#user-settings").on('click', '#changePassword', function() {
+    showChangePasswordModal();
+  });
+
   $('#limitCheck').click(function () {
     if($(this).is(":checked")) {
       $("#limitAmount").removeAttr("disabled");
@@ -256,6 +362,10 @@ $(document).ready(function () {
 
   $("#settingsModal").on('click', "#saveSettings", function () {
     saveSettings();
+  });
+
+  $("#userSettingsModal").on('click', "#saveUserSettings", function () {
+    saveUserSettings();
   });
 
   $("#settingsModal").on('hidden.bs.modal', function () {

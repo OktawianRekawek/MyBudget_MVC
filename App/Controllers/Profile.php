@@ -316,4 +316,19 @@ class Profile extends Authenticated
     }
       
   }
+
+  public function changeUserSettingsAction()
+  {
+    if(isset($_POST["name"]))
+    {
+      $ret = $this->user->changeUserSettings($_POST);
+      // file_put_contents("dbg.txt", $ret);
+      echo json_encode($ret);
+    }
+    if(isset($_POST["password"]))
+    {
+      $ret = $this->user->changeUserPassword($_POST);
+      echo json_encode($ret);
+    }
+  }
 }

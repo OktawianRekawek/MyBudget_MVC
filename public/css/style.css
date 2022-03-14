@@ -82,15 +82,20 @@ body {
 
 #incomes-categories,
 #expenses-categories,
-#payment-categories {
+#payment-categories,
+#user-settings {
   display: none;
   width: 100%;
 }
 
 .income-category,
 .expense-category,
-.payment-category {
+.payment-category{
   background-color: #6c757d;
+}
+
+#user-settings {
+  background-color: #9fa2a3;
 }
 
 .hidden {
