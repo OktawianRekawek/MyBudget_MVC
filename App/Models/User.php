@@ -461,7 +461,7 @@ class User extends \Core\Model
     $expensesCategoryQuery = $db->query("SELECT name FROM expenses_category_default");
     $expensesCategories = $expensesCategoryQuery->fetchAll();
 
-    $sql = 'INSERT INTO expenses_category_assigned_to_users VALUES (NULL, :id, :category)';
+    $sql = 'INSERT INTO expenses_category_assigned_to_users VALUES (NULL, :id, :category, NULL, 0.00)';
     
     foreach ($expensesCategories as $expCategory){
       $stmt = $db->prepare($sql);
@@ -487,7 +487,7 @@ class User extends \Core\Model
     $incomesCategoryQuery = $db->query("SELECT name FROM incomes_category_default");
     $incomesCategories = $incomesCategoryQuery->fetchAll();
 
-    $sql = 'INSERT INTO incomes_category_assigned_to_users VALUES (NULL, :id, :category)';
+    $sql = 'INSERT INTO incomes_category_assigned_to_users VALUES (NULL, :id, :category, NULL, 0.00)';
     
     foreach ($incomesCategories as $incCategory){
       $stmt = $db->prepare($sql);

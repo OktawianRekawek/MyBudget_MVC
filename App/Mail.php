@@ -24,7 +24,7 @@ class Mail
   {
     # Instantiate the client.
     //$mg = Mailgun::create(Config::MAILGUN_API_KEY); // For US servers
-    $mg = Mailgun::create(Config::MAILGUN_API_KEY);//, 'https://api.eu.mailgun.net/v3'); // For EU servers
+    $mg = Mailgun::create(Config::MAILGUN_API_KEY, 'https://api.eu.mailgun.net/v3'); // For EU servers
     $domain = Config::MAILGUN_DOMAIN;
     # Make the call to the client.
     $mg->messages()->send($domain, array(
