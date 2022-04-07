@@ -1,9 +1,9 @@
-var currentDate = new Date();
+let currentDate = new Date();
 
-var expenses = new Array();
+let expenses = [];
 
-var firstDayOfMonth = makeDate(currentDate.getFullYear(), currentDate.getMonth(), 1);
-var lastDayOfMonth = makeDate(currentDate.getFullYear(), currentDate.getMonth()+1, 0);
+let firstDayOfMonth = makeDate(currentDate.getFullYear(), currentDate.getMonth(), 1);
+let lastDayOfMonth = makeDate(currentDate.getFullYear(), currentDate.getMonth()+1, 0);
 
 function makeDate(year, month, day) {
   return new Date(year, month, day);
@@ -44,7 +44,7 @@ function getExpenses () {
 
 function getSpendAmount(categoryName) {
   
-  var amount;
+  let amount;
   expenses.forEach(element => {
     if (categoryName == element.name)
     {
@@ -56,37 +56,45 @@ function getSpendAmount(categoryName) {
 
 function initSummary() {
 
-  $(".check-limit").html("");
+  let checkLimit = document.getElementById('check-limit');
+  checkLimit.innerHTML = "";
 
-  if ($(".category-option:selected").data("limited")){
+  let categoryOptions = document.getElementById("category");
+  let selectedCategoryOption = categoryOptions.selectedOptions[0];
+  if (selectedCategoryOption.dataset.limited){
 
-    var limit = parseFloat($(".category-option:selected").data("limit"));
-    var category = $("#category option:selected").val();
-    var spend = parseFloat(getSpendAmount(category));
+    let limit = parseFloat(selectedCategoryOption.dataset.limit);
+    let category = selectedCategoryOption.label;
+    let spend = parseFloat(getSpendAmount(category));
     if (isNaN(spend)) {
       spend = 0;
     }
-    var stayed = limit - spend;
+    let stayed = limit - spend;
 
-    var divLimit = `<div class="col-3"><p class="font-weight-bold mb-0">Limit:</p><p class="mb-0">${limit.toFixed(2)} zł</p></div>`;
-    var divSpend = `<div class="col-3"><p class="font-weight-bold mb-0">Wydano:</p><p class="mb-0">${spend.toFixed(2)} zł</p></div>`;
-    var divStayed = `<div class="col-3"><p class="font-weight-bold mb-0">Zostało:</p><p class="mb-0">${stayed.toFixed(2)} zł</p></div>`;
-    var divSum = `<div class="col-3"><p class="font-weight-bold mb-0">Suma:</p><p class="mb-0" id="summary">${spend.toFixed(2)} zł</p></div>`;
-    if (stayed <= 0)
-      $(".check-limit").removeClass("bg-success").addClass("bg-danger");
-    else
-      $(".check-limit").removeClass("bg-danger").addClass("bg-success");
-    $(".check-limit").append(divLimit).append(divSpend).append(divStayed).append(divSum);
+    let divLimit = `<div class="col-3"><p class="font-weight-bold mb-0">Limit:</p><p class="mb-0">${limit.toFixed(2)} zł</p></div>`;
+    let divSpend = `<div class="col-3"><p class="font-weight-bold mb-0">Wydano:</p><p class="mb-0">${spend.toFixed(2)} zł</p></div>`;
+    let divStayed = `<div class="col-3"><p class="font-weight-bold mb-0">Zostało:</p><p class="mb-0">${stayed.toFixed(2)} zł</p></div>`;
+    let divSum = `<div class="col-3"><p class="font-weight-bold mb-0">Suma:</p><p class="mb-0" id="summary">${spend.toFixed(2)} zł</p></div>`;
 
-    $("#amount").change(function() {
-      var sum = spend+parseFloat($("#amount").val());
-      console.log(sum);
-      console.log(limit);
-      $("#summary").html(`${sum.toFixed(2)} zł`);
-      if (sum > limit)
-        $(".check-limit").removeClass("bg-success").addClass("bg-danger");
+    let classes = checkLimit.classList;
+    if (stayed <= 0) {
+      classes.add("bg-danger");
+      classes.remove("bg-success");
+    } else {
+      classes.remove("bg-danger");
+      classes.add("bg-success");
+    }
+    checkLimit.innerHTML = divLimit + divSpend + divStayed + divSum;
+
+    let amount = document.getElementById("amount");
+    amount.addEventListener('change', () => {
+      let sum = spend+parseFloat(amount.value);
+      let summary = document.getElementById("summary");
+      summary.innerHTML = (`${sum.toFixed(2)} zł`);
+      if (sum > limit) 
+        classes.replace("bg-success", "bg-danger");
       else
-        $(".check-limit").removeClass("bg-danger").addClass("bg-success");
+        classes.replace("bg-danger", "bg-success");
     });
   }
 }
@@ -96,7 +104,9 @@ $(document).ready(function () {
   getExpenses();
   initSummary();
 
-  $("#category").change(function() {
+  let category = document.getElementById("category");
+
+  category.addEventListener('change', () => {
     initSummary();
   });
   

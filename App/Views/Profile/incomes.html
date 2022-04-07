@@ -25,7 +25,7 @@
     </header>
     <div class="w-100"></div>
     <div class= "col-md-8 col-lg-6 mx-auto text-center text-light py-0 container">
-      <div class="check-limit row"></div>
+      <div id="check-limit" class="check-limit row"></div>
     </div>
     <div class="w-100"></div>
     <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
@@ -63,11 +63,19 @@
               <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
               <select name="category" id="category" class="form-control">
                 {% for category in categories %}
-                {% if category.name is same as currCategory %}
-                <option selected data-limit="{{ category.amount }}" data-limited="{{ category.limited }}" class="category-option">{{ category.name }}</option>
-                {% else %}
-                <option data-limit="{{ category.amount }}" data-limited="{{ category.limited }}" class="category-option">{{ category.name }}</option>
-                {% endif %}
+                  {% if currCategory %}
+                    {% if category.name is same as currCategory %}
+                      <option selected data-limit="{{ category.amount }}" data-limited="{{ category.limited }}" class="category-option">{{ category.name }}</option>
+                     {% else %}
+                      <option data-limit="{{ category.amount }}" data-limited="{{ category.limited }}" class="category-option">{{ category.name }}</option>
+                     {% endif %}
+                  {% else %}
+                    {% if loop.first %}
+                      <option selected data-limit="{{ category.amount }}" data-limited="{{ category.limited }}" class="category-option">{{ category.name }}</option>
+                    {% else %}
+                      <option data-limit="{{ category.amount }}" data-limited="{{ category.limited }}" class="category-option">{{ category.name }}</option>
+                    {% endif %}
+                  {% endif %}
                 {% endfor %}
               </select>
             </div>

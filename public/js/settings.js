@@ -1,19 +1,20 @@
 
-var slideItem = function (itemName) {
+function slideItem(itemName) {
   $(itemName).slideToggle(500);
 }
 
-var getIncomesCategories = function () {
+function getIncomesCategories() {
   $.ajax({
     url: "/Profile/getIncomesCategories",
     type: "POST",
     dataType: 'json',
     success: function (response) {
-      var categories = response;
-      var category;
-      var categoryName;
-      var categoryLimited;
-      var categoryLimitAmount;
+      let categories = response;
+      let category;
+      let categoryName;
+      let categoryLimited;
+      let categoryLimitAmount;
+      let categoriesList = document.getElementById('incomes-categories');
       
       categories.forEach(function (item, index) {
         categoryName = item.name;
@@ -24,27 +25,28 @@ var getIncomesCategories = function () {
         if (categoryLimited==1)
           category += `<br>Cel: ${categoryLimitAmount} zł`;
         category += `</button>`;
-        $('#incomes-categories').append(category);
+        categoriesList.innerHTML += category;
         
       });
 
-      var addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between addCatModalBtn" data-category="income">Dodaj kategorię</button>`;
-      $('#incomes-categories').append(addCategoryBtn);
+      let addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between addCatModalBtn" data-category="income">Dodaj kategorię</button>`;
+      categoriesList.innerHTML += addCategoryBtn;
     }
   });
 }
 
-var getExpensesCategories = function () {
+function getExpensesCategories() {
   $.ajax({
     url: "/Profile/getExpensesCategories",
     type: "POST",
     dataType: 'json',
     success: function (response) {
-      var categories = response;
-      var category;
-      var categoryName;
-      var categoryLimited;
-      var categoryLimitAmount;
+      let categories = response;
+      let category;
+      let categoryName;
+      let categoryLimited;
+      let categoryLimitAmount;
+      let categoriesList = document.getElementById('expenses-categories');
       
       categories.forEach(function (item, index) {
         categoryName = item.name;
@@ -55,113 +57,137 @@ var getExpensesCategories = function () {
         if (categoryLimited==1)
           category += `<br>Limit: ${categoryLimitAmount} zł`;
         category += `</button>`;
-        $('#expenses-categories').append(category);
+        categoriesList.innerHTML += category;
         
       });
 
-      var addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between addCatModalBtn" data-category="expense">Dodaj kategorię</button>`;
-      $('#expenses-categories').append(addCategoryBtn);
+      let addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between addCatModalBtn" data-category="expense">Dodaj kategorię</button>`;
+      categoriesList.innerHTML += addCategoryBtn;
     }
   });
 }
 
-var getPaymentMethodsCategories = function () {
+function getPaymentMethodsCategories() {
   $.ajax({
     url: "/Profile/getPaymentMethodsCategories",
     type: "POST",
     dataType: 'json',
     success: function (response) {
-      var categories = response;
-      var category;
-      var categoryName;
+      let categories = response;
+      let category;
+      let categoryName;
+      let categoriesList = document.getElementById('payment-categories');
       
       categories.forEach(function (item, index) {
         categoryName = item.name;
         categoryId = item.id;
         category = `<button type="button" class="btn btn-primary payment-category row mx-auto col-sm-12 my-1 rounded justify-content-between" id="settingsModalBtn" data-category="payment" data-id="${categoryId}" data-name="${categoryName}">${categoryName}`;
         category += `</button>`;
-        $('#payment-categories').append(category);
+        categoriesList.innerHTML += category;
         
       });
 
-      var addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between addCatModalBtn" data-category="payment">Dodaj kategorię</button>`;
-      $('#payment-categories').append(addCategoryBtn);
+      let addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between addCatModalBtn" data-category="payment">Dodaj kategorię</button>`;
+      categoriesList.innerHTML += addCategoryBtn;
     }
   });
 }
 
-var changeCategorySettings = function (property) {
-  var categoryName = $(property).data('name');
-  var categoryId = $(property).data('id');
+function changeCategorySettings(property) {
+  let categoryName = property.dataset.name;
+  let categoryId = property.dataset.id;
 
-  $('#categoryName').val(categoryName);
-  $('#categoryId').val( categoryId);
+  let categoryNameInput = document.getElementById('categoryName');
+  let categoryIdInput = document.getElementById('categoryId');
+  let categoryAmount = document.getElementById('category-amount');
 
-  if ($(property).data('category') != 'payment') {
-    var categoryLimitAmount = $(property).data('amount');
-    var categoryLimited = $(property).data('limit');
+  categoryNameInput.value = categoryName;
+  categoryIdInput.value = categoryId;
+
+  if (property.dataset.category === 'payment') {
+    categoryAmount.classList.add("hidden");  
+  } else {
+
+    let categoryLimitAmount = property.dataset.amount;
+    let categoryLimited = property.dataset.limit;
+    let limitAmount = document.getElementById('limitAmount');
     
-    $('#limitAmount').val(categoryLimitAmount);
+    limitAmount.value = categoryLimitAmount;
   
-    $('.category-amount').removeClass("hidden");
+    categoryAmount.classList.remove("hidden");
 
-    if ($(property).data('category') == 'income')
-      $('.form-check-label').html('Ustal cel');
-    else if ($(property).data('category') == 'expense')
-      $('.form-check-label').html('Ustal limit'); 
+    let formCheckLabel = document.getElementById('form-check-label');
+    if (property.dataset.category === 'income')
+      formCheckLabel.innerHTML = 'Ustal cel';
+    else if (property.dataset.category === 'expense')
+      formCheckLabel.innerHTML = 'Ustal limit'; 
 
-    if (categoryLimited)
+    let limitCheck = document.getElementById('limitCheck');
+    if (categoryLimited == 1)
     {
-      $('#limitCheck').prop('checked', true);
-      $("#limitAmount").removeAttr("disabled");
+      limitCheck.checked = true;
+      limitAmount.disabled = false;
     } else {
-      $('#limitCheck').prop('checked', false);
-      $("#limitAmount").attr("disabled", "disabled");
+      limitCheck.checked = false;
+      limitAmount.disabled = true;
     }
-  } else {
-    $('.category-amount').addClass("hidden");
   }
-  $("#modalLabel").html("Ustawienia kategorii");
 
-  $("#settingsModal").modal('show').data('category', $(property).data('category'));
+  let modalLabel = document.getElementById('modalLabel');
+  modalLabel.innerHTML = "Ustawienia kategorii";
+
+  let settingsModal = document.getElementById('settingsModal');
+  $("#settingsModal").modal('show');
+  settingsModal.dataset.category = property.dataset.category;
 }
 
-var showAddCategoryModal = function(property) {
-  if ($(property).data('category') == 'income')
-    $('.form-check-label').html('Ustal cel');
-  else if ($(property).data('category') == 'expense')
-    $('.form-check-label').html('Ustal limit'); 
+function showAddCategoryModal(property) {
+  let formCheckLabel = document.getElementById('form-check-label');
+  if (property.dataset.category == 'income')
+    formCheckLabel.innerHTML = 'Ustal cel';
+  else if (property.dataset.category == 'expense')
+    formCheckLabel.innerHTML = 'Ustal limit';
 
-    $("#modalLabel").html("Dodaj kategorię");
-    $('#categoryName').val("");
-    $('#categoryId').val(null);
-  if ($(property).data('category') != 'payment') {
-    $('.category-amount').removeClass("hidden");
-    $('#limitAmount').val("");
-    $("#limitAmount").attr("disabled", "disabled");
-    $('#limitCheck').prop('checked', false);
+  let modalLabel = document.getElementById('modalLabel');
+  let categoryName = document.getElementById('categoryName');
+  let categoryId = document.getElementById('categoryId');
+  modalLabel.innerHTML = "Dodaj kategorię";
+  categoryName.value = "";
+  categoryId.value = null;
+  let categoryAmount = document.getElementById('category-amount');
+  let limitAmount = document.getElementById('limitAmount');
+  let limitCheck = document.getElementById('limitCheck');
+  if (property.dataset.category != 'payment') {
+    categoryAmount.classList.remove("hidden");
+    limitAmount.value = "";
+    limitCheck.checked = false;
+    limitAmount.disabled = true;
   } else {
-    $('.category-amount').addClass("hidden");
+    categoryAmount.classList.add("hidden");
   }
-    
-    $("#settingsModal").modal('show').data('category', $(property).data('category'));
+
+  let settingsModal = document.getElementById('settingsModal');  
+  $("#settingsModal").modal('show');
+  settingsModal.dataset.category = property.dataset.category;
 }
 
-var saveSettings = function () {
-  var categoryName = $('#categoryName').val();
+function saveSettings() {
+  let categoryNameElement = document.getElementById('categoryName');
+  let categoryName = categoryNameElement.value;
   if (categoryName === "") {
-    $('#categoryName').addClass("err-amount");
+    categoryNameElement.classList.add("err-amount");
     return;
   } else
-    $('#categoryName').removeClass('err-amount');
-  var categoryLimitAmount = $('#limitAmount').val();
-  var categoryLimited = $('#limitCheck').is(":checked")?1:0;
-  var categoryId = $('#categoryId').val();
-  var categoryType = $('#settingsModal').data('category');
+    categoryNameElement.classList.remove('err-amount');
+  let categoryLimitAmount = document.getElementById('limitAmount').value;
+  let categoryLimited = document.getElementById('limitCheck').checked?1:0;
+  let categoryId = document.getElementById('categoryId').value;
+  let categoryType = document.getElementById('settingsModal').dataset.category;
+  let text;
   if (categoryType == 'income')
-    var text = 'Cel';
+    text = 'Cel';
   else 
-    var text = 'Limit';
+    text = 'Limit';
   $.ajax({
     url: "/Profile/saveCategorySettings",
     type: "POST",
@@ -175,14 +201,17 @@ var saveSettings = function () {
     },
     complete: function (result) {
       if (categoryId) {
-        var element = $('.chosen');
+        let element = document.getElementsByClassName('chosen')[0];
         if (categoryLimited)
-          element.html(`${categoryName}<br>${text}: ${categoryLimitAmount} zł`);
+          element.innerHTML = `${categoryName}<br>${text}: ${categoryLimitAmount} zł`;
         else
-          element.html(`${categoryName}`);
-        element.data('name', categoryName);
+          element.innerHTML = `${categoryName}`;
+        element.dataset.name = categoryName;
         if (categoryType != 'payment')
-          element.data('amount', categoryLimitAmount).data('limit', categoryLimited);
+        {
+          element.dataset.amount = categoryLimitAmount;
+          element.dataset.limit = categoryLimited;
+        }
       } else {
         categoryId = result.responseJSON[0];
         category = `<button type="button" class="btn btn-primary ${categoryType}-category row mx-auto col-sm-12 my-1 rounded justify-content-between" id="settingsModalBtn" data-category="${categoryType}" data-id="${categoryId}" data-name="${categoryName}"`;
@@ -193,7 +222,8 @@ var saveSettings = function () {
         if (categoryLimited==1)
           category += `<br>Cel: ${categoryLimitAmount} zł`;
         category += `</button>`;
-        $(`.addCatModalBtn:visible`).before(category);
+        let addCategoryBtn = document.querySelector('.categories-list[style*="display\\: block"] .addCatModalBtn');
+        addCategoryBtn.insertAdjacentHTML("beforebegin", category);
       }
 
         $("#settingsModal").modal('hide');
@@ -201,90 +231,99 @@ var saveSettings = function () {
   });
 }
 
-var chooseSettingsCategory = function () {
+function chooseSettingsCategory() {
 
-  $("#incomes-category-toggle").click(function () {
-    slideItem("#incomes-categories");
-    if ($('#expenses-categories').css('display') == 'block')
-      slideItem("#expenses-categories");
-    if ($('#payment-categories').css('display') == 'block')
-      slideItem("#payment-categories");
-    if ($('#user-settings').css('display') == 'block')
-        slideItem("#user-settings");
+  let incomesCategoryToggle = document.getElementById('incomes-category-toggle');
+  let expensesCategoryToggle = document.getElementById('expenses-category-toggle');
+  let paymentCategoryToggle = document.getElementById('payment-category-toggle');
+  let userSettingsToggle = document.getElementById('user-settings-toggle');
+  let incomesCategories = document.getElementById('incomes-categories');
+  let expensesCategories = document.getElementById('expenses-categories');
+  let paymentCategories = document.getElementById('payment-categories');
+  let userSettings = document.getElementById('user-settings');
+
+  incomesCategoryToggle.addEventListener('click', () => {
+    slideItem(incomesCategories);
+    if (expensesCategories.style.display == 'block')
+      slideItem(expensesCategories);
+    if (paymentCategories.style.display == 'block')
+      slideItem(paymentCategories);
+    if (userSettings.style.display == 'block')
+        slideItem(userSettings);
   });
 
-  $("#expenses-category-toggle").click(function () {
-    slideItem("#expenses-categories");
-    if ($('#incomes-categories').css('display') == 'block')
-      slideItem("#incomes-categories");
-    if ($('#payment-categories').css('display') == 'block')
-      slideItem("#payment-categories");
-    if ($('#user-settings').css('display') == 'block')
-        slideItem("#user-settings");
+  expensesCategoryToggle.addEventListener('click', () => {
+    slideItem(expensesCategories);
+    if (incomesCategories.style.display == 'block')
+      slideItem(incomesCategories);
+    if (paymentCategories.style.display == 'block')
+      slideItem(paymentCategories);
+    if (userSettings.style.display == 'block')
+        slideItem(userSettings);
   });
 
-  $("#payment-category-toggle").click(function () {
-    slideItem("#payment-categories");
-    if ($('#expenses-categories').css('display') == 'block')
-      slideItem("#expenses-categories");
-    if ($('#incomes-categories').css('display') == 'block')
-      slideItem("#incomes-categories");
-    if ($('#user-settings').css('display') == 'block')
-      slideItem("#user-settings");
+  paymentCategoryToggle.addEventListener('click', () => {
+    slideItem(paymentCategories);
+    if (expensesCategories.style.display == 'block')
+      slideItem(expensesCategories);
+    if (incomesCategories.style.display == 'block')
+      slideItem(incomesCategories);
+    if (userSettings.style.display == 'block')
+      slideItem(userSettings);
   });
 
-  $("#user-settings-toggle").click(function () {
-    slideItem("#user-settings");
-    if ($('#expenses-categories').css('display') == 'block')
-      slideItem("#expenses-categories");
-    if ($('#incomes-categories').css('display') == 'block')
-      slideItem("#incomes-categories");
-    if ($('#payment-categories').css('display') == 'block')
-      slideItem("#payment-categories");
+  userSettingsToggle.addEventListener('click', () => {
+    slideItem(userSettings);
+    if (expensesCategories.style.display == 'block')
+      slideItem(expensesCategories);
+    if (incomesCategories.style.display == 'block')
+      slideItem(incomesCategories);
+    if (paymentCategories.style.display == 'block')
+      slideItem(paymentCategories);
   });
 }
 
-var showUserEditModal = function () {
-  $('#login-input').val($('#login').html());
-  $('#email-input').val($('#email').html());
-  $('#login-form').removeClass("hidden");
-  $('#email-form').removeClass("hidden");
-  $('#password-form').addClass("hidden");
+function showUserEditModal() {
+  document.getElementById('login-input').value = document.getElementById('login').innerHTML;
+  document.getElementById('email-input').value = document.getElementById('email').innerHTML;
+  document.getElementById('login-form').classList.remove("hidden");
+  document.getElementById('email-form').classList.remove("hidden");
+  document.getElementById('password-form').classList.add("hidden");
   $("#userSettingsModal").modal('show');
 }
 
-var showChangePasswordModal = function () {
-  $('#login-form').addClass("hidden");
-  $('#email-form').addClass("hidden");
-  $('#password-form').removeClass("hidden");
+function showChangePasswordModal() {
+  document.getElementById('login-form').classList.add("hidden");
+  document.getElementById('email-form').classList.add("hidden");
+  document.getElementById('password-form').classList.remove("hidden");
   $("#userSettingsModal").modal('show');
 }
 
-var saveUserSettings = function () {
-  if ($('#login-form').hasClass('hidden')) {
+function saveUserSettings() {
+  if (document.getElementById('login-form').classList.contains('hidden')) {
     $.ajax({
       url: "/Profile/changeUserSettings",
       type: "POST",
       dataType: "json",
       data: {
-        password: $('#password-input').val()
+        password: document.getElementById('password-input').value
       },
       complete: function (result) {
           retCode = result.responseJSON;
           switch (retCode)
           {
             case 0:
-              $('#err-message').html("");
+              document.getElementById('err-message').innerHTML = "";
               $("#userSettingsModal").modal('hide');
               break;
             case 1:
-              $('#err-message').html("Hasło musi zawierać conajmniej 6 znaków!");
+              document.getElementById('err-message').innerHTML = "Hasło musi zawierać conajmniej 6 znaków!";
               break;
             case 2:
-              $('#err-message').html("Hasło musi zawierać conajmniej jedną literę!");
+              document.getElementById('err-message').innerHTML = "Hasło musi zawierać conajmniej jedną literę!";
               break;
             case 3:
-              $('#err-message').html("Hasło musi zawierać conajmniej jedną cyfrę!");
+              document.getElementById('err-message').innerHTML = "Hasło musi zawierać conajmniej jedną cyfrę!";
               break;
           }
         }
@@ -295,30 +334,30 @@ var saveUserSettings = function () {
       type: "POST",
       dataType: "json",
       data: {
-        name: $('#login-input').val(),
-        email: $('#email-input').val()
+        name: document.getElementById('login-input').value,
+        email: document.getElementById('email-input').value
       },
       complete: function (result) {
           retCode = result.responseJSON;
           switch (retCode)
           {
             case 0:
-              $('#err-message').html("");
-              $('#login').html($('#login-input').val());
-              $('#email').html($('#email-input').val());
+              document.getElementById('err-message').innerHTML = "";
+              document.getElementById('login').innerHTML = document.getElementById('login-input').value;
+              document.getElementById('email').innerHTML = document.getElementById('email-input').value;
               $("#userSettingsModal").modal('hide');
               break;
             case 1:
-              $('#err-message').html("Nazwa nie może być pusta!");
+              document.getElementById('err-message').innerHTML = "Nazwa nie może być pusta!";
               break;
             case 2:
-              $('#err-message').html("Proszę wpisać poprawny adres email!");
+              document.getElementById('err-message').innerHTML = "Proszę wpisać poprawny adres email!";
               break;
             case 3:
-              $('#err-message').html("Nie wprowadzono żadnych zmian!");
+              document.getElementById('err-message').innerHTML = "Nie wprowadzono żadnych zmian!";
               break;
             case 4:
-              $('#err-message').html("Podany adres email jest już używany!");
+              document.getElementById('err-message').innerHTML = "Podany adres email jest już używany!";
               break;
           }
         }
@@ -326,7 +365,7 @@ var saveUserSettings = function () {
   }
 }
 
-$(document).ready(function () {
+$(document).ready( () => {
 
   getIncomesCategories();
   getExpensesCategories();
@@ -334,46 +373,43 @@ $(document).ready(function () {
 
   chooseSettingsCategory();
 
-  $(".categories-list").on('click', "#settingsModalBtn", function () {
-    changeCategorySettings(this);
-    $(this).addClass("chosen");
-  });
-
-  $(".categories-list").on('click', '.addCatModalBtn', function() {
-    showAddCategoryModal(this);
-  });
-
-  $("#user-settings").on('click', '#userEdit', function() {
-    showUserEditModal();
-  });
-
-  $("#user-settings").on('click', '#changePassword', function() {
-    showChangePasswordModal();
-  });
-
-  $('#limitCheck').click(function () {
-    if($(this).is(":checked")) {
-      $("#limitAmount").removeAttr("disabled");
-      $("#limitAmount").focus();
-    } else {
-      $("#limitAmount").attr("disabled", "disabled");
+  document.addEventListener('click', (event) => {
+    let element = event.target;
+    if(element && element.id == 'settingsModalBtn') {
+      changeCategorySettings(element);
+      element.classList.add('chosen');
+    }
+    if(element && element.classList.contains('addCatModalBtn')) {
+      showAddCategoryModal(element);
+    }
+    if(element && element.id == 'userEdit') {
+      showUserEditModal();
+    }
+    if(element && element.id == 'changePassword') {
+      showChangePasswordModal();
+    }
+    if(element && element.id == 'saveSettings') {
+      saveSettings();
+    }
+    if(element && element.id == 'saveUserSettings') {
+      saveUserSettings();
+    }
+    if(element && element.id == 'limitCheck') {
+      if(element.checked) {
+        document.getElementById('limitAmount').disabled = false;
+        document.getElementById('limitAmount').focus();
+      } else {
+        document.getElementById('limitAmount').disabled = true;
+      }
     }
   });
 
-  $("#settingsModal").on('click', "#saveSettings", function () {
-    saveSettings();
+  $("#settingsModal").on('hidden.bs.modal', () => {
+    document.getElementsByClassName('chosen')[0].classList.remove('chosen');
   });
 
-  $("#userSettingsModal").on('click', "#saveUserSettings", function () {
-    saveUserSettings();
-  });
-
-  $("#settingsModal").on('hidden.bs.modal', function () {
-    $('.chosen').removeClass('chosen');
-  });
-
-  $("#settingsModal").on('shown.bs.modal', function () {
-    $('#categoryName').focus();
+  $("#settingsModal").on('shown.bs.modal', () => {
+    document.getElementById('categoryName').focus();
   });
   
   

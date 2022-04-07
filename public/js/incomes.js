@@ -1,9 +1,9 @@
-var currentDate = new Date();
+let currentDate = new Date();
 
-var incomes = new Array();
+let incomes = [];
 
-var firstDayOfMonth = makeDate(currentDate.getFullYear(), currentDate.getMonth(), 1);
-var lastDayOfMonth = makeDate(currentDate.getFullYear(), currentDate.getMonth()+1, 0);
+let firstDayOfMonth = makeDate(currentDate.getFullYear(), currentDate.getMonth(), 1);
+let lastDayOfMonth = makeDate(currentDate.getFullYear(), currentDate.getMonth()+1, 0);
 
 function makeDate(year, month, day) {
   return new Date(year, month, day);
@@ -44,7 +44,7 @@ function getIncomes () {
 
 function getIncomesAmount(categoryName) {
   
-  var amount;
+  let amount;
   incomes.forEach(element => {
     if (categoryName == element.name)
     {
@@ -56,37 +56,44 @@ function getIncomesAmount(categoryName) {
 
 function initSummary() {
 
-  $(".check-limit").html("");
+  let checkLimit = document.getElementById('check-limit');
+  checkLimit.innerHTML = "";
 
-  if ($(".category-option:selected").data("limited")){
+  let categoryOptions = document.getElementById("category");
+  let selectedCategoryOption = categoryOptions.selectedOptions[0];
+  if (selectedCategoryOption.dataset.limited){
 
-    var limit = parseFloat($(".category-option:selected").data("limit"));
-    var category = $("#category option:selected").val();
-    var deposited = parseFloat(getIncomesAmount(category));
+    let limit = parseFloat(selectedCategoryOption.dataset.limit);
+    let category = selectedCategoryOption.label;
+    let deposited = parseFloat(getIncomesAmount(category));
     if (isNaN(deposited)) {
       deposited = 0;
     }
-    var stayed = limit - deposited;
+    let stayed = limit - deposited;
 
-    var divLimit = `<div class="col-3"><p class="font-weight-bold mb-0">Cel:</p><p class="mb-0">${limit.toFixed(2)} zł</p></div>`;
-    var divDeposit = `<div class="col-3"><p class="font-weight-bold mb-0">Odłożono:</p><p class="mb-0">${deposited.toFixed(2)} zł</p></div>`;
-    var divStayed = `<div class="col-3"><p class="font-weight-bold mb-0">Brakuje:</p><p class="mb-0">${stayed.toFixed(2)} zł</p></div>`;
-    var divSum = `<div class="col-3"><p class="font-weight-bold mb-0">Suma:</p><p class="mb-0" id="summary">${deposited.toFixed(2)} zł</p></div>`;
-    if (deposited < limit)
-      $(".check-limit").removeClass("bg-success").addClass("bg-info");
-    else
-      $(".check-limit").removeClass("bg-info").addClass("bg-success");
-    $(".check-limit").append(divLimit).append(divDeposit).append(divStayed).append(divSum);
+    let divLimit = `<div class="col-3"><p class="font-weight-bold mb-0">Cel:</p><p class="mb-0">${limit.toFixed(2)} zł</p></div>`;
+    let divDeposit = `<div class="col-3"><p class="font-weight-bold mb-0">Odłożono:</p><p class="mb-0">${deposited.toFixed(2)} zł</p></div>`;
+    let divStayed = `<div class="col-3"><p class="font-weight-bold mb-0">Brakuje:</p><p class="mb-0">${stayed.toFixed(2)} zł</p></div>`;
+    let divSum = `<div class="col-3"><p class="font-weight-bold mb-0">Suma:</p><p class="mb-0" id="summary">${deposited.toFixed(2)} zł</p></div>`;
+    
+    let classes = checkLimit.classList;
+    if (deposited < limit) {
+      classes.add("bg-danger");
+      classes.remove("bg-success");
+    } else {
+      classes.remove("bg-danger");
+      classes.add("bg-success");
+    }
+    checkLimit.innerHTML = divLimit + divDeposit + divStayed + divSum;
 
-    $("#amount").change(function() {
-      var sum = deposited+parseFloat($("#amount").val());
-      console.log(sum);
-      console.log(limit);
-      $("#summary").html(`${sum.toFixed(2)} zł`);
-      if (sum < limit)
-        $(".check-limit").removeClass("bg-success").addClass("bg-info");
+    let amount = document.getElementById("amount");
+    amount.addEventListener('change', () => {
+      let sum = deposited+parseFloat(amount.value);
+      summary.innerHTML = (`${sum.toFixed(2)} zł`);
+      if (sum > limit) 
+        classes.replace("bg-success", "bg-danger");
       else
-        $(".check-limit").removeClass("bg-info").addClass("bg-success");
+        classes.replace("bg-danger", "bg-success");
     });
   }
 }
@@ -96,9 +103,9 @@ $(document).ready(function () {
   getIncomes();
   initSummary();
 
-  $("#category").change(function() {
+  let category = document.getElementById("category");
+
+  category.addEventListener('change', () => {
     initSummary();
   });
-  
-
 });
