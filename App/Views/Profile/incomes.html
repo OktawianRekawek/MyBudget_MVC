@@ -6,19 +6,11 @@
 
 <main class="container my-3">
 
-  {% if success %}
-  <div class="row addIncome">
-    <div class="col-md-8 col-lg-6 mx-auto bg-success text-center text-uppercase text-light py-2 mb-1">
-      <h2 class="h2 mb-0">{{success}}</h2>
-    </div>
-  </div>
-  {% elseif error %}
-  <div class="row addIncome">
+  <div id="resultMessage" class="row addIncome hidden">
     <div class="col-md-8 col-lg-6 mx-auto bg-danger text-center text-uppercase text-light py-2 mb-1">
-      <h2 class="h2 mb-0">{{error}}</h2>
+      <h2 class="h2 mb-0"></h2>
     </div>
   </div>
-  {% endif %}
   <div class="row addIncome">
     <header class="col-md-8 col-lg-6 mx-auto bg-sea text-center text-uppercase text-light py-2">
       <h1 class="h2 mb-0">Dodaj przychód</h1>
@@ -29,21 +21,14 @@
     </div>
     <div class="w-100"></div>
     <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
-      <form method="post" action="/profile/createIncome">
+      <form>
         <div class="form-group row justify-content-center">
           <label for="amount" class="col-sm-3 col-form-label">Kwota</label>
-          <div class="col-sm-8">
-            {% if error %}
-            <div class="input-group err-amount">
-              <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-dollar-sign"></i></span></div>
-              <input type="text" class="form-control" id="amount" name="amount" value={{currAmount}}>
-            </div>
-            {% else %}
+          <div id="amountForm" class="col-sm-8">
             <div class="input-group">
               <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-dollar-sign"></i></span></div>
-              <input type="text" class="form-control" id="amount" name="amount">
+              <input type="number" step="0.01" min="0.00" class="form-control" id="amount" name="amount" value="0.00">
             </div>
-            {% endif %}
           </div>
         </div>
 
@@ -91,7 +76,7 @@
           </div>
         </div>
 
-        <button type="submit" class="btn btn-info btn-lg font-weight-bold">Dodaj</button>
+        <button type="button" id="addIncomeBtn" class="btn btn-info btn-lg font-weight-bold">Dodaj</button>
         <button type="reset" class="btn btn-danger btn-lg font-weight-bold ml-3">Anuluj</button>
       </form>
     </div>

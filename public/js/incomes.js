@@ -9,8 +9,6 @@ function makeDate(year, month, day) {
   return new Date(year, month, day);
 }
 
-
-
 function formatDate(year, month, day) {
   if (month < 10)
     month = '0' + month;
@@ -69,6 +67,8 @@ function initSummary() {
       deposited = 0;
     }
     let stayed = limit - deposited;
+    if (stayed < 0)
+      stayed = 0;
 
     let divLimit = `<div class="col-3"><p class="font-weight-bold mb-0">Cel:</p><p class="mb-0">${limit.toFixed(2)} zł</p></div>`;
     let divDeposit = `<div class="col-3"><p class="font-weight-bold mb-0">Odłożono:</p><p class="mb-0">${deposited.toFixed(2)} zł</p></div>`;
@@ -77,10 +77,10 @@ function initSummary() {
     
     let classes = checkLimit.classList;
     if (deposited < limit) {
-      classes.add("bg-danger");
+      classes.add("bg-info");
       classes.remove("bg-success");
     } else {
-      classes.remove("bg-danger");
+      classes.remove("bg-info");
       classes.add("bg-success");
     }
     checkLimit.innerHTML = divLimit + divDeposit + divStayed + divSum;
@@ -90,11 +90,57 @@ function initSummary() {
       let sum = deposited+parseFloat(amount.value);
       summary.innerHTML = (`${sum.toFixed(2)} zł`);
       if (sum > limit) 
-        classes.replace("bg-success", "bg-danger");
+        classes.replace("bg-success", "bg-info");
       else
-        classes.replace("bg-danger", "bg-success");
+        classes.replace("bg-info", "bg-success");
     });
   }
+}
+
+function showResultMessage(result) {
+  const resultMessageElement = document.getElementById('resultMessage');
+  const messageContainer = resultMessageElement.querySelector('div');
+  const messageContent = resultMessageElement.querySelector('h2');
+  if (result == ERR) {
+    if(messageContainer.classList.contains('bg-success'))
+      messageContainer.classList.remove('bg-success');
+    messageContainer.classList.add('bg-danger');
+    messageContent.innerHTML = "wpisz prawidłową kwotę!";
+  } else {
+    if(messageContainer.classList.contains('bg-danger'))
+      messageContainer.classList.remove('bg-danger');
+    messageContainer.classList.add('bg-success');
+    messageContent.innerHTML = "Przychód został dodany!";
+  }
+  resultMessageElement.classList.remove('hidden');
+}
+
+function addIncome() {
+
+  let amount = document.getElementById('amount').value;
+  let date = document.getElementById('date').value;
+  let category = document.getElementById('category').value;
+  let comment = document.getElementById('comment').value;
+
+  if (amount <= 0) {
+    showResultMessage(ERR);
+    return;
+  }
+
+  let data = new FormData();
+  data.append('amount', amount);
+  data.append('date', date);
+  data.append('category', category);
+  data.append('comment', comment);
+
+  fetch('/Profile/addIncome', {
+    method: 'POST',
+    body: data
+  }).then( (res) => res.json())
+  .then((data) => {
+    showResultMessage(data);
+    getIncomes();
+  })
 }
 
 window.onload = function() {
@@ -106,4 +152,12 @@ window.onload = function() {
   category.addEventListener('change', () => {
     initSummary();
   });
+
+  const amountInput = document.getElementById('amount');
+  amountValidation(amountInput);
+
+  const addIncomeBtn = document.getElementById('addIncomeBtn');
+  addIncomeBtn.addEventListener('click', () => {
+    addIncome();
+  })
 }

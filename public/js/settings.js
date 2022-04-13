@@ -359,6 +359,8 @@ function saveUserSettings() {
 }
 window.onload = function(){
 
+  const limitAmountInput = document.getElementById('limitAmount');
+
   getIncomesCategories();
   getExpensesCategories();
   getPaymentMethodsCategories();
@@ -388,10 +390,10 @@ window.onload = function(){
     }
     if(element && element.id == 'limitCheck') {
       if(element.checked) {
-        document.getElementById('limitAmount').disabled = false;
-        document.getElementById('limitAmount').focus();
+        limitAmountInput.disabled = false;
+        limitAmountInput.focus();
       } else {
-        document.getElementById('limitAmount').disabled = true;
+        limitAmountInput.disabled = true;
       }
     }
   });
@@ -406,6 +408,6 @@ window.onload = function(){
     document.getElementById('categoryName').focus();
   });
   
-  
+  amountValidation(limitAmountInput);
 
 }

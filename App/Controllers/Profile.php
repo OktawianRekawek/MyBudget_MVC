@@ -30,7 +30,7 @@ class Profile extends Authenticated
    *
    * @return void
    */
-  public function addIncomeAction()
+  public function createIncomeAction()
   {
     View::renderTemplate('Profile/incomes.html', [
         'user' => $this->user,
@@ -44,7 +44,7 @@ class Profile extends Authenticated
    *
    * @return void
    */
-  public function addExpenseAction()
+  public function createExpenseAction()
   {
     View::renderTemplate('Profile/expenses.html', [
         'user' => $this->user,
@@ -94,28 +94,12 @@ class Profile extends Authenticated
    *
    * @return void
    */
-  public function createIncomeAction()
+  public function addIncomeAction()
   {
     if ($this->user->addIncome($_POST)) {
-      
-      View::renderTemplate('Profile/incomes.html', [
-        'success' => 'Przychód został dodany!',
-        'user' => $this->user,
-        'currentDate' => date('Y-m-d'),
-        'categories' => User::getIncomeCategories($this->user->id)
-      ]);
-
+      echo json_encode(0);
     } else {
-      
-      View::renderTemplate('Profile/incomes.html', [
-        'error' => 'Wpisz prawidłową kwotę!',
-        'user' => $this->user,
-        'currentDate' => $_POST['date'],
-        'categories' => User::getIncomeCategories($this->user->id),
-        'currCategory' => $_POST['category'],
-        'currComment' => $_POST['comment'],
-        'currAmount' => $_POST['amount']
-      ]);
+      echo json_encode(1);
     }
   }
   
@@ -124,31 +108,12 @@ class Profile extends Authenticated
    *
    * @return void
    */
-  public function createExpenseAction()
+  public function addExpenseAction()
   {
     if ($this->user->addExpense($_POST)) {
-      
-      View::renderTemplate('Profile/expenses.html', [
-        'success' => 'Wydatek został dodany!',
-        'user' => $this->user,
-        'currentDate' => $_POST['date'],
-        'currCategory' => $_POST['category'],
-        'categories' => User::getExpensesCategories($this->user->id),
-        'paymentMethods' => User::getPaymentMethods($this->user->id)
-      ]);
-
+      echo json_encode(0);
     } else {
-      
-      View::renderTemplate('Profile/expenses.html', [
-        'error' => 'Wpisz prawidłową kwotę!',
-        'user' => $this->user,
-        'currentDate' => $_POST['date'],
-        'categories' => User::getExpensesCategories($this->user->id),
-        'paymentMethods' => User::getPaymentMethods($this->user->id),
-        'currCategory' => $_POST['category'],
-        'currComment' => $_POST['comment'],
-        'currAmount' => $_POST['amount']
-      ]);
+      echo json_encode(1);
     }
   }
 

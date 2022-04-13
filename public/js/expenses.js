@@ -69,6 +69,8 @@ function initSummary() {
       spend = 0;
     }
     let stayed = limit - spend;
+    if (stayed < 0)
+      stayed = 0;
 
     let divLimit = `<div class="col-3"><p class="font-weight-bold mb-0">Limit:</p><p class="mb-0">${limit.toFixed(2)} zł</p></div>`;
     let divSpend = `<div class="col-3"><p class="font-weight-bold mb-0">Wydano:</p><p class="mb-0">${spend.toFixed(2)} zł</p></div>`;
@@ -98,6 +100,55 @@ function initSummary() {
   }
 }
 
+function showResultMessage(result) {
+  const resultMessageElement = document.getElementById('resultMessage');
+  const messageContainer = resultMessageElement.querySelector('div');
+  const messageContent = resultMessageElement.querySelector('h2');
+  if (result == ERR) {
+    if(messageContainer.classList.contains('bg-success'))
+      messageContainer.classList.remove('bg-success');
+    messageContainer.classList.add('bg-danger');
+    messageContent.innerHTML = "wpisz prawidłową kwotę!";
+  } else {
+    if(messageContainer.classList.contains('bg-danger'))
+      messageContainer.classList.remove('bg-danger');
+    messageContainer.classList.add('bg-success');
+    messageContent.innerHTML = "Wydatek został dodany!";
+  }
+  resultMessageElement.classList.remove('hidden');
+}
+
+function addExpense() {
+
+  let amount = document.getElementById('amount').value;
+  let date = document.getElementById('date').value;
+  let category = document.getElementById('category').value;
+  let payment = document.getElementById('payment').value;
+  let comment = document.getElementById('comment').value;
+
+
+  if (amount <= 0) {
+    showResultMessage(ERR);
+    return;
+  }
+
+  let data = new FormData();
+  data.append('amount', amount);
+  data.append('date', date);
+  data.append('category', category);
+  data.append('payment', payment);
+  data.append('comment', comment);
+
+  fetch('/Profile/addExpense', {
+    method: 'POST',
+    body: data
+  }).then( (res) => res.json())
+  .then((data) => {
+    showResultMessage(data);
+    getExpenses();
+  })
+}
+
 window.onload = function() {
 
   getExpenses();
@@ -108,5 +159,11 @@ window.onload = function() {
     initSummary();
   });
   
+  const amountInput = document.getElementById('amount');
+  amountValidation(amountInput);
 
+  const addExpenseeBtn = document.getElementById('addExpenseBtn');
+  addExpenseeBtn.addEventListener('click', () => {
+    addExpense();
+  })
 }

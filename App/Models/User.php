@@ -560,7 +560,7 @@ class User extends \Core\Model
     $amount = $data['amount'];
     $selectedCategory = $data['category'];
     
-    if (preg_match("/^[0-9]+(\,[0-9]{2})?$/", $amount)) {
+    if (preg_match("/^[0-9]+(.[0-9]{2})?$/", $amount)) {
       
       $correctAmount = str_replace(',','.',$amount);
       
@@ -628,7 +628,7 @@ class User extends \Core\Model
     $selectedCategory = $data['category'];
     $selectedPayMethod = $data['payment'];
     
-    if (preg_match("/^[0-9]+(\,[0-9]{2})?$/", $amount)) {
+    if (preg_match("/^[0-9]+(.[0-9]{2})?$/", $amount)) {
       
       $correctAmount = str_replace(',','.',$amount);
       
