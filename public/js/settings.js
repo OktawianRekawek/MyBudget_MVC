@@ -4,12 +4,11 @@ function slideItem(itemName) {
 }
 
 function getIncomesCategories() {
-  $.ajax({
-    url: "/Profile/getIncomesCategories",
-    type: "POST",
-    dataType: 'json',
-    success: function (response) {
-      let categories = response;
+
+  fetch('/Profile/getIncomesCategories')
+  .then((res) => res.json())
+  .then((data) => {
+      let categories = data;
       let category;
       let categoryName;
       let categoryLimited;
@@ -31,17 +30,14 @@ function getIncomesCategories() {
 
       let addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between addCatModalBtn" data-category="income">Dodaj kategorię</button>`;
       categoriesList.innerHTML += addCategoryBtn;
-    }
-  });
+    });
 }
 
 function getExpensesCategories() {
-  $.ajax({
-    url: "/Profile/getExpensesCategories",
-    type: "POST",
-    dataType: 'json',
-    success: function (response) {
-      let categories = response;
+  fetch('/Profile/getExpensesCategories')
+  .then((res) => res.json())
+  .then((data) => {
+      let categories = data;
       let category;
       let categoryName;
       let categoryLimited;
@@ -63,17 +59,14 @@ function getExpensesCategories() {
 
       let addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between addCatModalBtn" data-category="expense">Dodaj kategorię</button>`;
       categoriesList.innerHTML += addCategoryBtn;
-    }
-  });
+    });
 }
 
 function getPaymentMethodsCategories() {
-  $.ajax({
-    url: "/Profile/getPaymentMethodsCategories",
-    type: "POST",
-    dataType: 'json',
-    success: function (response) {
-      let categories = response;
+  fetch('/Profile/getPaymentMethodsCategories')
+  .then((res) => res.json())
+  .then((data) => {
+      let categories = data;
       let category;
       let categoryName;
       let categoriesList = document.getElementById('payment-categories');
@@ -89,7 +82,6 @@ function getPaymentMethodsCategories() {
 
       let addCategoryBtn = `<button type="button" class="btn btn-success row mx-auto col-sm-12 my-1 rounded justify-content-between addCatModalBtn" data-category="payment">Dodaj kategorię</button>`;
       categoriesList.innerHTML += addCategoryBtn;
-    }
   });
 }
 
@@ -188,46 +180,47 @@ function saveSettings() {
     text = 'Cel';
   else 
     text = 'Limit';
-  $.ajax({
-    url: "/Profile/saveCategorySettings",
-    type: "POST",
-    dataType: "json",
-    data: {
-      category: categoryType,
-      id: categoryId,
-      name: categoryName,
-      amount: categoryLimitAmount,
-      limited: categoryLimited
-    },
-    complete: function (result) {
-      if (categoryId) {
-        let element = document.getElementsByClassName('chosen')[0];
-        if (categoryLimited)
-          element.innerHTML = `${categoryName}<br>${text}: ${categoryLimitAmount} zł`;
-        else
-          element.innerHTML = `${categoryName}`;
-        element.dataset.name = categoryName;
-        if (categoryType != 'payment')
-        {
-          element.dataset.amount = categoryLimitAmount;
-          element.dataset.limit = categoryLimited;
-        }
-      } else {
-        categoryId = result.responseJSON[0];
-        category = `<button type="button" class="btn btn-primary ${categoryType}-category row mx-auto col-sm-12 my-1 rounded justify-content-between" id="settingsModalBtn" data-category="${categoryType}" data-id="${categoryId}" data-name="${categoryName}"`;
-        if (categoryType != 'payment') {
-          category += ` data-amount="${categoryLimitAmount}" data-limit="${categoryLimited}"`;
-        }
-        category += `>${categoryName}`;
-        if (categoryLimited==1)
-          category += `<br>Cel: ${categoryLimitAmount} zł`;
-        category += `</button>`;
-        let addCategoryBtn = document.querySelector('.categories-list[style*="display\\: block"] .addCatModalBtn');
-        addCategoryBtn.insertAdjacentHTML("beforebegin", category);
-      }
 
-        $("#settingsModal").modal('hide');
+  let data = new FormData();
+  data.append('category', categoryType);
+  data.append('id', categoryId);
+  data.append('name', categoryName);
+  data.append('amount', categoryLimitAmount);
+  data.append('limited', categoryLimited);
+
+  fetch('/Profile/saveCategorySettings', {
+    method: 'POST',
+    body: data
+  })
+  .then((res) => res.json())
+  .then((data) => {
+    if (categoryId) {
+      let element = document.getElementsByClassName('chosen')[0];
+      if (categoryLimited)
+        element.innerHTML = `${categoryName}<br>${text}: ${categoryLimitAmount} zł`;
+      else
+        element.innerHTML = `${categoryName}`;
+      element.dataset.name = categoryName;
+      if (categoryType != 'payment')
+      {
+        element.dataset.amount = categoryLimitAmount;
+        element.dataset.limit = categoryLimited;
       }
+    } else {
+      categoryId = data[0];
+      category = `<button type="button" class="btn btn-primary ${categoryType}-category row mx-auto col-sm-12 my-1 rounded justify-content-between" id="settingsModalBtn" data-category="${categoryType}" data-id="${categoryId}" data-name="${categoryName}"`;
+      if (categoryType != 'payment') {
+        category += ` data-amount="${categoryLimitAmount}" data-limit="${categoryLimited}"`;
+      }
+      category += `>${categoryName}`;
+      if (categoryLimited==1)
+        category += `<br>Cel: ${categoryLimitAmount} zł`;
+      category += `</button>`;
+      let addCategoryBtn = document.querySelector('.categories-list[style*="display\\: block"] .addCatModalBtn');
+      addCategoryBtn.insertAdjacentHTML("beforebegin", category);
+    }
+
+    $("#settingsModal").modal('hide');
   });
 }
 
@@ -300,72 +293,71 @@ function showChangePasswordModal() {
 }
 
 function saveUserSettings() {
+  let data = new FormData();
+
   if (document.getElementById('login-form').classList.contains('hidden')) {
-    $.ajax({
-      url: "/Profile/changeUserSettings",
-      type: "POST",
-      dataType: "json",
-      data: {
-        password: document.getElementById('password-input').value
-      },
-      complete: function (result) {
-          retCode = result.responseJSON;
-          switch (retCode)
-          {
-            case 0:
-              document.getElementById('err-message').innerHTML = "";
-              $("#userSettingsModal").modal('hide');
-              break;
-            case 1:
-              document.getElementById('err-message').innerHTML = "Hasło musi zawierać conajmniej 6 znaków!";
-              break;
-            case 2:
-              document.getElementById('err-message').innerHTML = "Hasło musi zawierać conajmniej jedną literę!";
-              break;
-            case 3:
-              document.getElementById('err-message').innerHTML = "Hasło musi zawierać conajmniej jedną cyfrę!";
-              break;
-          }
-        }
+    data.append('password', document.getElementById('password-input').value);
+
+    fetch('/Profile/changeUserSettings', {
+      method: 'POST',
+      body: data
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      retCode = data;
+      switch (retCode)
+      {
+        case 0:
+          document.getElementById('err-message').innerHTML = "";
+          $("#userSettingsModal").modal('hide');
+          break;
+        case 1:
+          document.getElementById('err-message').innerHTML = "Hasło musi zawierać conajmniej 6 znaków!";
+          break;
+        case 2:
+          document.getElementById('err-message').innerHTML = "Hasło musi zawierać conajmniej jedną literę!";
+          break;
+        case 3:
+          document.getElementById('err-message').innerHTML = "Hasło musi zawierać conajmniej jedną cyfrę!";
+          break;
+      }
     });
   } else {
-    $.ajax({
-      url: "/Profile/changeUserSettings",
-      type: "POST",
-      dataType: "json",
-      data: {
-        name: document.getElementById('login-input').value,
-        email: document.getElementById('email-input').value
-      },
-      complete: function (result) {
-          retCode = result.responseJSON;
-          switch (retCode)
-          {
-            case 0:
-              document.getElementById('err-message').innerHTML = "";
-              document.getElementById('login').innerHTML = document.getElementById('login-input').value;
-              document.getElementById('email').innerHTML = document.getElementById('email-input').value;
-              $("#userSettingsModal").modal('hide');
-              break;
-            case 1:
-              document.getElementById('err-message').innerHTML = "Nazwa nie może być pusta!";
-              break;
-            case 2:
-              document.getElementById('err-message').innerHTML = "Proszę wpisać poprawny adres email!";
-              break;
-            case 3:
-              document.getElementById('err-message').innerHTML = "Nie wprowadzono żadnych zmian!";
-              break;
-            case 4:
-              document.getElementById('err-message').innerHTML = "Podany adres email jest już używany!";
-              break;
-          }
-        }
+    data.append('name', document.getElementById('login-input').value);
+    data.append('email', document.getElementById('email-input').value);
+
+    fetch('/Profile/changeUserSettings', {
+      method: 'POST',
+      body: data
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      retCode = data;
+      switch (retCode)
+      {
+        case 0:
+          document.getElementById('err-message').innerHTML = "";
+          document.getElementById('login').innerHTML = document.getElementById('login-input').value;
+          document.getElementById('email').innerHTML = document.getElementById('email-input').value;
+          $("#userSettingsModal").modal('hide');
+          break;
+        case 1:
+          document.getElementById('err-message').innerHTML = "Nazwa nie może być pusta!";
+          break;
+        case 2:
+          document.getElementById('err-message').innerHTML = "Proszę wpisać poprawny adres email!";
+          break;
+        case 3:
+          document.getElementById('err-message').innerHTML = "Nie wprowadzono żadnych zmian!";
+          break;
+        case 4:
+          document.getElementById('err-message').innerHTML = "Podany adres email jest już używany!";
+          break;
+      }
     });
   }
 }
-
-$(document).ready( () => {
+window.onload = function(){
 
   getIncomesCategories();
   getExpensesCategories();
@@ -405,7 +397,9 @@ $(document).ready( () => {
   });
 
   $("#settingsModal").on('hidden.bs.modal', () => {
-    document.getElementsByClassName('chosen')[0].classList.remove('chosen');
+    let chosenElement = document.getElementsByClassName('chosen');
+    if (chosenElement.length)
+      document.getElementsByClassName('chosen')[0].classList.remove('chosen');
   });
 
   $("#settingsModal").on('shown.bs.modal', () => {
@@ -414,4 +408,4 @@ $(document).ready( () => {
   
   
 
-});
+}

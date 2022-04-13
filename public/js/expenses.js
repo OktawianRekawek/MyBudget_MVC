@@ -23,23 +23,22 @@ function formatDate(year, month, day) {
 
 function getExpenses () {
 
+  let data = new FormData();
+  data.append('startDate', formatDate(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth()+1, 1));
+  data.append('endDate', formatDate(lastDayOfMonth.getFullYear(), lastDayOfMonth.getMonth()+1, lastDayOfMonth.getDate()));
 
-  $.ajax({
-    url: "/Profile/getExpenses",
-    type: "POST",
-    dataType: 'json',
-    data: {
-      startDate: formatDate(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth()+1, 1),
-      endDate: formatDate(lastDayOfMonth.getFullYear(), lastDayOfMonth.getMonth()+1, lastDayOfMonth.getDate())
-    },
-    success: function (response) {
-      response.forEach(element => {
-        expenses.push(element);
-      });
-    },
-    async: false
-  });
-
+  fetch('/Profile/getExpenses', {
+    method: 'POST',
+    body: data,
+  })
+  .then((res) => res.json())
+  .then((data) => {
+    data.forEach(element => {
+      expenses.push(element);
+    });
+  })
+  .then(() => initSummary())
+  
 }
 
 function getSpendAmount(categoryName) {
@@ -99,10 +98,9 @@ function initSummary() {
   }
 }
 
-$(document).ready(function () {
+window.onload = function() {
 
   getExpenses();
-  initSummary();
 
   let category = document.getElementById("category");
 
@@ -111,4 +109,4 @@ $(document).ready(function () {
   });
   
 
-});
+}

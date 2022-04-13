@@ -23,22 +23,21 @@ function formatDate(year, month, day) {
 
 function getIncomes () {
 
+  let data = new FormData();
+  data.append('startDate', formatDate(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth()+1, 1));
+  data.append('endDate', formatDate(lastDayOfMonth.getFullYear(), lastDayOfMonth.getMonth()+1, lastDayOfMonth.getDate()));
 
-  $.ajax({
-    url: "/Profile/getIncomes",
-    type: "POST",
-    dataType: 'json',
-    data: {
-      startDate: formatDate(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth()+1, 1),
-      endDate: formatDate(lastDayOfMonth.getFullYear(), lastDayOfMonth.getMonth()+1, lastDayOfMonth.getDate())
-    },
-    success: function (response) {
-      response.forEach(element => {
-        incomes.push(element);
-      });
-    },
-    async: false
-  });
+  fetch('/Profile/getIncomes', {
+    method: 'POST',
+    body: data,
+  })
+  .then((res) => res.json())
+  .then((data) => {
+    data.forEach(element => {
+      incomes.push(element);
+    });
+  })
+  .then(() => initSummary())
 
 }
 
@@ -98,14 +97,13 @@ function initSummary() {
   }
 }
 
-$(document).ready(function () {
+window.onload = function() {
 
   getIncomes();
-  initSummary();
 
   let category = document.getElementById("category");
 
   category.addEventListener('change', () => {
     initSummary();
   });
-});
+}

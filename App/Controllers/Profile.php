@@ -288,7 +288,10 @@ class Profile extends Authenticated
        echo json_encode($lastid);
       }
       else
+      {
         User::saveIncomeSettings($_POST);
+        echo json_encode(0);
+      }
     }
     else if (!strcmp($_POST['category'], 'expense')) 
     {
@@ -300,7 +303,10 @@ class Profile extends Authenticated
        echo json_encode($lastid);
       }
       else
+      {
         User::saveExpenseSettings($_POST);
+        echo json_encode(0);
+      }
     }
     else if (!strcmp($_POST['category'], 'payment')) 
     {
@@ -312,7 +318,10 @@ class Profile extends Authenticated
        echo json_encode($lastid);
       }
       else
+      {
         User::savePaymentSettings($_POST);
+        echo json_encode(0);
+      }
     }
       
   }
