@@ -71,7 +71,7 @@
           </p>
         </div>
         <div class='col-6 text-right'>
-          <p>{{income.amountSum}}</p>
+          <p>{{(income.amountSum)|number_format(2, '.', ',')}}</p>
         </div>
         {% endfor %}
       </div>
@@ -93,7 +93,7 @@
           </p>
         </div>
         <div class='col-6 text-right'>
-          <p>{{expense.amountSum}}</p>
+          <p>{{expense.amountSum|number_format(2, '.', ',')}}</p>
         </div>
         {% endfor %}
       </div>
@@ -105,7 +105,7 @@
         </div>
         <div class="col-6 text-right">
           <h3>
-            {{incomesSum}}
+            {{incomesSum|number_format(2, '.', ',')}}
           </h3>
         </div>
       </div>
@@ -117,7 +117,7 @@
         </div>
         <div class="col-6 text-right">
           <h3>
-            {{expensesSum}}
+            {{expensesSum|number_format(2, '.', ',')}}
           </h3>
         </div>
       </div>

@@ -9,8 +9,6 @@ function makeDate(year, month, day) {
   return new Date(year, month, day);
 }
 
-
-
 function formatDate(year, month, day) {
   if (month < 10)
     month = '0' + month;
@@ -26,6 +24,7 @@ function getExpenses () {
   let data = new FormData();
   data.append('startDate', formatDate(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth()+1, 1));
   data.append('endDate', formatDate(lastDayOfMonth.getFullYear(), lastDayOfMonth.getMonth()+1, lastDayOfMonth.getDate()));
+  expenses = [];
 
   fetch('/Profile/getExpenses', {
     method: 'POST',
@@ -153,11 +152,21 @@ window.onload = function() {
 
   getExpenses();
 
-  let category = document.getElementById("category");
+  const category = document.getElementById("category");
+  const dateElement = document.getElementById("date");
 
   category.addEventListener('change', () => {
     initSummary();
   });
+
+  date.addEventListener('change', () => {
+    let date = new Date();
+    date.setTime(Date.parse(dateElement.value));
+    firstDayOfMonth = makeDate(date.getFullYear(), date.getMonth(), 1);
+    lastDayOfMonth = makeDate(date.getFullYear(), date.getMonth()+1, 0);
+    
+    getExpenses();
+  })
   
   const amountInput = document.getElementById('amount');
   amountValidation(amountInput);
