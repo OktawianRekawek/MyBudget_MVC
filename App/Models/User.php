@@ -940,6 +940,71 @@ class User extends \Core\Model
 
     return 0;
   }
+
+  protected function getOtherCategoryId($tableName)
+  {
+    $sql = "SELECT id FROM $tableName WHERE user_id = $this->id AND name = 'Inne'";
+
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+    
+    return intval($stmt->fetchAll(PDO::FETCH_COLUMN, 0)[0]);
+  }
+
+  protected function moveRecordsToOtherCategory($srcId, $dstId, $type)
+  {
+    $labelId = User::getColumnName($type);
+    if ($type != 'income')
+      $type = 'expense';
+    $tableName = $type . "s";
+
+    $sql = "UPDATE $tableName SET $labelId = $dstId WHERE user_id = $this->id AND $labelId = $srcId";
+    // file_put_contents("dbg.txt", $sql);
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+  }
+
+  protected function removeCategory($categoryId, $tableName)
+  {
+    $sql = "DELETE FROM $tableName WHERE user_id = $this->id AND id = $categoryId";
+    // file_put_contents("dbg.txt", $sql);
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+  }
+
+  public static function getTableName($type) 
+  {
+    if ($type == 'payment')
+      return $type."_methods_assigned_to_users";
+    else
+      return $type."s_category_assigned_to_users";
+  }
+
+  public static function getColumnName($type) 
+  {
+    if ($type == 'payment')
+      return $type."_method_assigned_to_user_id";
+    else
+      return $type."_category_assigned_to_user_id";
+  }
+
+  public function deleteCategory($data)
+  {
+    $categoryId = $data['categoryId'];
+    $categoryType = $data['categoryType'];
+
+    
+    $tableName = User::getTableName($categoryType);
+    $otherCategoryId = $this->getOtherCategoryId($tableName);
+    // file_put_contents("dbg.txt", $otherCategoryId);
+    $this->moveRecordsToOtherCategory($categoryId, $otherCategoryId, $categoryType);
+    $this->removeCategory($categoryId, $tableName);
+
+    return 0;
+  }
   
 }
 

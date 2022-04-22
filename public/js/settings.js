@@ -6,9 +6,9 @@ function slideItem(itemName) {
 function getIncomesCategories() {
 
   fetch('/Profile/getIncomesCategories')
-  .then((res) => res.json())
-  .then((data) => {
-      let categories = data;
+  .then((response) => response.json())
+  .then((result) => {
+      let categories = result;
       let category;
       let categoryName;
       let categoryLimited;
@@ -35,9 +35,9 @@ function getIncomesCategories() {
 
 function getExpensesCategories() {
   fetch('/Profile/getExpensesCategories')
-  .then((res) => res.json())
-  .then((data) => {
-      let categories = data;
+  .then((response) => response.json())
+  .then((result) => {
+      let categories = result;
       let category;
       let categoryName;
       let categoryLimited;
@@ -64,9 +64,9 @@ function getExpensesCategories() {
 
 function getPaymentMethodsCategories() {
   fetch('/Profile/getPaymentMethodsCategories')
-  .then((res) => res.json())
-  .then((data) => {
-      let categories = data;
+  .then((response) => response.json())
+  .then((result) => {
+      let categories = result;
       let category;
       let categoryName;
       let categoriesList = document.getElementById('payment-categories');
@@ -125,6 +125,16 @@ function changeCategorySettings(property) {
     }
   }
 
+  let deleteCategoryBtn = document.getElementById('deleteCategory'); 
+
+  if (categoryName === "Inne") {
+    categoryNameInput.disabled = true;
+    deleteCategoryBtn.classList.add('hidden');
+  } else {
+    categoryNameInput.disabled = false;
+    deleteCategoryBtn.classList.remove('hidden');
+  }
+
   let modalLabel = document.getElementById('modalLabel');
   modalLabel.innerHTML = "Ustawienia kategorii";
 
@@ -157,6 +167,9 @@ function showAddCategoryModal(property) {
   } else {
     categoryAmount.classList.add("hidden");
   }
+
+  let deleteCategoryBtn = document.getElementById('deleteCategory'); 
+  deleteCategoryBtn.classList.add('hidden');
 
   let settingsModal = document.getElementById('settingsModal');  
   $("#settingsModal").modal('show');
@@ -192,8 +205,8 @@ function saveSettings() {
     method: 'POST',
     body: data
   })
-  .then((res) => res.json())
-  .then((data) => {
+  .then((response) => response.json())
+  .then((result) => {
     if (categoryId) {
       let element = document.getElementsByClassName('chosen')[0];
       if (categoryLimited)
@@ -207,7 +220,7 @@ function saveSettings() {
         element.dataset.limit = categoryLimited;
       }
     } else {
-      categoryId = data[0];
+      categoryId = result[0];
       category = `<button type="button" class="btn btn-primary ${categoryType}-category row mx-auto col-sm-12 my-1 rounded justify-content-between" id="settingsModalBtn" data-category="${categoryType}" data-id="${categoryId}" data-name="${categoryName}"`;
       if (categoryType != 'payment') {
         category += ` data-amount="${categoryLimitAmount}" data-limit="${categoryLimited}"`;
@@ -292,6 +305,28 @@ function showChangePasswordModal() {
   $("#userSettingsModal").modal('show');
 }
 
+function deleteCategory() {
+
+  let data = new FormData();
+  data.append('categoryId', document.getElementById('categoryId').value);
+  data.append('categoryType', document.getElementById('settingsModal').dataset.category);
+
+  fetch('/Profile/deleteCategory', {
+    method: 'post',
+    body: data
+  })
+  .then( (response) => response.json())
+  .then( (result) => {
+    if (result) 
+      alert('Błąd podczas usuwania kategorii!');
+    else{
+      let chosenElement = document.getElementsByClassName('chosen')[0];
+      chosenElement.remove();
+      $("#settingsModal").modal('hide');
+    }
+  });
+}
+
 function saveUserSettings() {
   let data = new FormData();
 
@@ -302,9 +337,9 @@ function saveUserSettings() {
       method: 'POST',
       body: data
     })
-    .then((res) => res.json())
-    .then((data) => {
-      retCode = data;
+    .then((response) => response.json())
+    .then((result) => {
+      retCode = result;
       switch (retCode)
       {
         case 0:
@@ -330,9 +365,9 @@ function saveUserSettings() {
       method: 'POST',
       body: data
     })
-    .then((res) => res.json())
-    .then((data) => {
-      retCode = data;
+    .then((response) => response.json())
+    .then((result) => {
+      retCode = result;
       switch (retCode)
       {
         case 0:
@@ -357,6 +392,7 @@ function saveUserSettings() {
     });
   }
 }
+
 window.onload = function(){
 
   const limitAmountInput = document.getElementById('limitAmount');
@@ -395,6 +431,11 @@ window.onload = function(){
       } else {
         limitAmountInput.disabled = true;
       }
+    }
+    if(element && element.id == 'deleteCategory')
+    {
+      if(confirm('Na pewno chcesz usunąć kategorię?\nWszystkie wpisy w tej kategorii\nzostaną przeniesione do kategorii Inne!'))
+        deleteCategory();
     }
   });
 

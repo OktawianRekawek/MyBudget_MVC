@@ -305,4 +305,15 @@ class Profile extends Authenticated
       echo json_encode($ret);
     }
   }
+
+  public function deleteCategoryAction()
+  {
+    if (isset($_POST))
+    {
+      $ret = $this->user->deleteCategory($_POST);
+      echo json_encode($ret);
+    }
+    else
+      echo json_encode(1);
+  }
 }
