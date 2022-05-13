@@ -101,3 +101,38 @@ body {
 .hidden {
   display: none;
 }
+
+.summaryLabelBtn:hover,
+.recordContainer:hover {
+  background-color: #dddedf;
+  cursor: pointer;
+}
+
+.summaryLabelBtn p {
+  margin: 8px 0;
+}
+
+.summaryLabelBtn *,
+.recordContainer * {
+  pointer-events: none;
+}
+
+.recordContainer p{
+  font-size: 12px;
+  margin: 8px 0;
+}
+
+.recordContainer .date{
+  padding-right: 0;
+}
+
+.recordContainer .comment{
+  padding: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recordContainer .amount{
+  padding-left: 0;
+}

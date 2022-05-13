@@ -130,6 +130,13 @@ class Profile extends Authenticated
     
     echo json_encode($incomes);
   }
+
+  public function getAllIncomesAction()
+  {
+    $incomes = $this->user->getAllIncomes($_POST['startDate'],$_POST['endDate']);
+    
+    echo json_encode($incomes);
+  }
   
    /**
    * Show balance page
@@ -311,6 +318,28 @@ class Profile extends Authenticated
     if (isset($_POST))
     {
       $ret = $this->user->deleteCategory($_POST);
+      echo json_encode($ret);
+    }
+    else
+      echo json_encode(1);
+  }
+
+  public function deleteRecordAction()
+  {
+    if (isset($_POST))
+    {
+      $ret = $this->user->deleteRecord($_POST);
+      echo json_encode($ret);
+    }
+    else
+      echo json_encode(1);
+  }
+
+  public function saveRecordAction()
+  {
+    if (isset($_POST))
+    {
+      $ret = $this->user->updateRecord($_POST);
       echo json_encode($ret);
     }
     else

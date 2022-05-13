@@ -711,6 +711,51 @@ class User extends \Core\Model
     return $incomes;
   }
 
+  public function getAllIncomes($startDate, $endDate)
+  {
+    $incomesCategories = User::getIncomeCategories($this->id);
+    $incomes = [];
+    
+    // $incomeCategory = $incomesCategories[0];
+    // $incomeCategory = $incomesCategories
+    foreach ($incomesCategories as $incomeCategory)
+    {
+      $categoryIncomes = [];
+      $amountSum = 0;
+      array_push($categoryIncomes, $incomeCategory['id']);
+      array_push($categoryIncomes, $incomeCategory['name']);
+    // }
+    // file_put_contents("dbg.txt", $this->id);
+      $sql = "SELECT date_of_income as date, amount, income_comment as comment, id
+              FROM incomes
+              WHERE user_id=:userid
+              AND income_category_assigned_to_user_id = :categoryId
+              AND date_of_income BETWEEN :startDate AND :endDate";
+
+      $db = static::getDB();
+      $stmt = $db->prepare($sql);
+
+      $stmt->bindValue(':userid', $this->id, PDO::PARAM_INT);
+      $stmt->bindValue(':categoryId', $incomeCategory['id'], PDO::PARAM_INT);
+      $stmt->bindValue(':startDate', $startDate, PDO::PARAM_STR);
+      $stmt->bindValue(':endDate', $endDate, PDO::PARAM_STR);
+
+      $stmt->execute();
+      $incomesRecords = $stmt->fetchAll();
+      array_multisort($incomesRecords);
+      foreach($incomesRecords as $record)
+      {
+        $amountSum += $record['amount'];
+      }
+      array_push($categoryIncomes, $amountSum);
+      array_push($categoryIncomes, $incomesRecords);
+
+      array_push($incomes, $categoryIncomes);
+      // file_put_contents("dbg.txt", $incomes);
+    } 
+    return $incomes;
+  }
+
   public static function saveIncomeSettings($data)
   {
     $id = $data['id'];
@@ -1002,6 +1047,71 @@ class User extends \Core\Model
     // file_put_contents("dbg.txt", $otherCategoryId);
     $this->moveRecordsToOtherCategory($categoryId, $otherCategoryId, $categoryType);
     $this->removeCategory($categoryId, $tableName);
+
+    return 0;
+  }
+
+  protected function removeRecord($recordId, $tableName)
+  {
+    $sql = "DELETE FROM $tableName WHERE user_id = $this->id AND id = $recordId";
+    // file_put_contents("dbg.txt", $sql);
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+  }
+
+  public function deleteRecord($data)
+  {
+    $recordId = $data['recordId'];
+    $recordType = $data['recordType'];
+
+    
+    $tableName = $recordType.'s';
+    $this->removeRecord($recordId, $tableName);
+
+    return 0;
+  }
+
+  public function updateRecord($data)
+  {
+
+    $recordCategory = $data['category'];
+    // file_put_contents("dbg.txt", $data['category']);
+    
+    $sql = "SELECT id FROM incomes_category_assigned_to_users WHERE user_id = '$this->id' AND name = :category";
+      
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':category', $recordCategory, PDO::PARAM_STR);
+  
+    $stmt->execute();
+
+    $categoryId = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+    $recordType = $data['recordType'];
+    $tableName = $recordType.'s';
+    $categoryIdColumn = $recordType.'_category_assigned_to_user_id';
+    $commentColumn = $recordType.'_comment';
+    $dateColumn = 'date_of_'.$recordType;
+    // file_put_contents("dbg.txt", $categoryIdColumn);
+
+    $sql = "UPDATE $tableName SET
+            $categoryIdColumn = :category_id,
+            amount = :amount,
+            $dateColumn = :date,
+            $commentColumn = :comment
+            WHERE user_id = $this->id AND id = :id";
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':category_id', $categoryId[0], PDO::PARAM_INT);
+    $stmt->bindValue(':amount', $data['amount'], PDO::PARAM_STR);
+    $stmt->bindValue(':date', $data['date'], PDO::PARAM_STR);
+    $stmt->bindValue(':comment', $data['comment'], PDO::PARAM_STR);
+    $stmt->bindValue(':id', $data['id'], PDO::PARAM_INT);
+
+    $stmt->execute();
 
     return 0;
   }

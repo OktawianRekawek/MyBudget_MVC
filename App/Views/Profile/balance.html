@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}MyBudget - Dodaj przychód{% endblock %}
+{% block title %}MyBudget - Przeglą Bilansu{% endblock %}
 
 {% block body %}
 
@@ -17,7 +17,7 @@
           <div class="col-sm-8">
             <div class="input-group">
               <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
-              <select name="period" id="period" class="form-control" onchange="submit(this);">
+              <select name="period" id="period" class="form-control">
                 {% for period in periods %}
                 {% if period is same as currPeriod %}
                 <option selected>{{ period }}</option>
@@ -29,32 +29,33 @@
             </div>
           </div>
         </div>
-        {% if currPeriod == "Niestandardowy" %}
-        <div class="form-group row justify-content-center">
-          <label for="date1" class="col-sm-1 col-form-label">Od</label>
-          <div class="col-xl-5">
-            <div class="input-group">
-              <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
-              <input type="date" class="form-control" id="date1" name="date1" value="{{date1}}">
+        <div id="uncommonPeriodForm" class="hidden">
+          <div class="form-group row justify-content-center">
+            <label for="date1" class="col-sm-1 col-form-label">Od</label>
+            <div class="col-xl-5">
+              <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
+                <input type="date" class="form-control" id="date1" name="date1" value="{{date1}}">
+              </div>
+            </div>
+            <label for="date2" class="col-sm-1 col-form-label">Do</label>
+            <div class="col-xl-5">
+              <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
+                <input type="date" class="form-control" id="date2" name="date2" value="{{date2}}">
+              </div>
             </div>
           </div>
-          <label for="date2" class="col-sm-1 col-form-label">Do</label>
-          <div class="col-xl-5">
-            <div class="input-group">
-              <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
-              <input type="date" class="form-control" id="date2" name="date2" value="{{date2}}">
-            </div>
-          </div>
+          <button type="submit" class="btn btn-info btn-lg font-weight-bold">Wyszukaj</button>
         </div>
-        <button type="submit" class="btn btn-info btn-lg font-weight-bold">Wyszukaj</button>
-        {% else %}
-        <h3 class="text-center">{{date1}} - {{date2}}</h3>
-        {% endif %}
+        <div id="commonPeriodLabel">
+          <h3 class="text-center">{{date1}} - {{date2}}</h3>
+        </div>
       </form>
 
     </div>
     <div class="w-100 my-2"></div>
-    <div class="col-md-5 bg-light mx-1 incomes">
+    <div class="col-lg-5 bg-light mx-1 incomes">
       <h2 class="text-center py-2">Przychody</h2>
       <div class="row px-4">
         <div class="col-6 border-bottom mb-3">
@@ -62,21 +63,12 @@
         </div>
         <div class="col-6 text-right border-bottom mb-3">
           <h4>Wartość [PLN]</h4>
-
         </div>
-        {% for income in incomes %}
-        <div class='col-6'>
-          <p>
-            {{income.name}}
-          </p>
+        <div id="incomesContainer" class="col-12">
         </div>
-        <div class='col-6 text-right'>
-          <p>{{(income.amountSum)|number_format(2, '.', ',')}}</p>
-        </div>
-        {% endfor %}
       </div>
     </div>
-    <div class="col-md-5 bg-light mx-1 expanses order-2 order-md-1">
+    <div class="col-lg-5 bg-light mx-1 expanses order-2 order-lg-1">
       <h2 class="text-center py-2">Wydatki</h2>
       <div class="row px-4">
         <div class="col-6 border-bottom mb-3">
@@ -84,7 +76,6 @@
         </div>
         <div class="col-6 text-right border-bottom mb-3">
           <h4>Wartość [PLN]</h4>
-
         </div>
         {% for expense in expenses %}
         <div class='col-6'>
@@ -98,19 +89,18 @@
         {% endfor %}
       </div>
     </div>
-    <div class="col-md-5 bg-light m-1 incomes-sum order-1 order-md-2 border-top">
+    <div class="col-lg-5 bg-light m-1 incomes-sum order-1 order-lg-2 border-top">
       <div class="row">
         <div class="col-6">
           <h3>Suma:</h3>
         </div>
         <div class="col-6 text-right">
-          <h3>
-            {{incomesSum|number_format(2, '.', ',')}}
+          <h3 id="incomesSumAmount">
           </h3>
         </div>
       </div>
     </div>
-    <div class="col-md-5 bg-light m-1 expanses-sum order-3">
+    <div class="col-lg-5 bg-light m-1 expanses-sum order-3">
       <div class="row">
         <div class="col-6">
           <h3>Suma:</h3>
@@ -131,12 +121,78 @@
       {% endif %}
     </div>
     <div class="col-md-6 bg-light incomes-graph order-5">
-      <img src="../img/Pie-chart.jpg" alt="" class="img-fluid">
+      <!-- <img src="../img/Pie-chart.jpg" alt="" class="img-fluid"> -->
+      <canvas id="incomesChart"></canvas>
     </div>
     <div class="col-md-6 bg-light expanses-graph order-6">
-      <img src="../img/Pie-chart.jpg" alt="" class="img-fluid">
+      <!-- <img src="../img/Pie-chart.jpg" alt="" class="img-fluid"> -->
     </div>
   </div>
 </main>
 
+<div class="modal fade" id="recordModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          <div class="form-group row justify-content-center">
+            <label for="amount" class="col-sm-3 col-form-label">Kwota</label>
+            <div id="amountForm" class="col-sm-8">
+              <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-dollar-sign"></i></span></div>
+                <input type="number" step="0.01" min="0.00" class="form-control" id="amount" name="amount" value="0.00">
+              </div>
+            </div>
+          </div>
+          <div class="form-group row justify-content-center">
+            <label for="date" class="col-sm-3 col-form-label">Data</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
+                <input type="date" class="form-control" id="date" name="date" value="{{currentDate}}" max="{{currentDate}}">
+              </div>
+            </div>
+          </div>
+          <div class="form-group row justify-content-center">
+            <label for="category" class="col-sm-3 col-form-label">Kategoria</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
+                <select name="category" id="category" class="form-control">
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row justify-content-center">
+            <label for="comment" class="col-sm-3 col-form-label">Komentarz</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="far fa-comment"></i></span></div>
+                <textarea class="form-control" id="comment" name="comment">{{currComment}}</textarea>
+              </div>
+            </div>
+          </div>
+          <input type="text" id="recordId" hidden>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="deleteRecord"> Usuń </button>
+        <button type="button" class="btn btn-primary" id="saveRecord">Zapisz</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script%}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/js/balance.js"></script>
 {% endblock %}
