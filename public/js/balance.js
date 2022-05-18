@@ -59,7 +59,21 @@ function getIncomes(startDate, endDate) {
   })
 }
 
+function getExpenses(startDate, endDate) {
+  let data = new FormData();
+  data.append('startDate', startDate);
+  data.append('endDate', endDate);
+  return new Promise ( (resolve) => {
+    fetch ('/Profile/getAllExpenses', {
+      method: 'post',
+      body: data
+    })
+    .then((response) => resolve(response.json()))
+  })
+}
+
 const incomesContainerElement = document.getElementById('incomesContainer');
+const expensesContainerElement = document.getElementById('expensesContainer');
 
 function createSummaryLabelBtn(categoryData) {
   let summaryLabelBtn = document.createElement('div');
@@ -126,18 +140,28 @@ function createCategorySummaryContainer(categoryData) {
 
 async function updateBalance() {
   incomes = await getIncomes(startDate, endDate);
-  incomesSum = 0;
+  let incomesSum = 0;
   incomesContainerElement.innerHTML = '';
-  // console.log(incomes);
+
   incomes.forEach(element => {
     incomesSum += element[2];
     if (element[2] != 0)
       incomesContainerElement.appendChild(createCategorySummaryContainer(element));
   });
   
-  // console.log(incomesContainerElement);
-  // expenses = getExpenses(startDate, endDate);
   document.getElementById('incomesSumAmount').innerHTML = incomesSum.toFixed(2);
+
+  expenses = await getExpenses(startDate, endDate);
+  let expensesSum = 0;
+  expensesContainerElement.innerHTML = '';
+
+  expenses.forEach(element => {
+    expensesSum += element[2];
+    if (element[2] != 0)
+      expensesContainerElement.appendChild(createCategorySummaryContainer(element));
+  });
+  
+  document.getElementById('expensesSumAmount').innerHTML = expensesSum.toFixed(2);
 }
 
 async function showEditRecordModal(recordElement) {
@@ -163,17 +187,30 @@ async function showEditRecordModal(recordElement) {
   recordId.value = record.id;
 
   recordCategorySelect.innerHTML = '';
-  incomes.forEach(element => {
-    let categoryOption = document.createElement('option');
-    categoryOption.innerHTML = element[1];
-    recordCategorySelect.appendChild(categoryOption);
-    if (element[1] == record.category)
-      categoryOption.selected = true;
-  });
+  
 
   if (recordElement.closest('.incomes')) {
     record.type = 'income';
     record.typeText = 'przychód';
+
+    incomes.forEach(element => {
+      let categoryOption = document.createElement('option');
+      categoryOption.innerHTML = element[1];
+      recordCategorySelect.appendChild(categoryOption);
+      if (element[1] == record.category)
+        categoryOption.selected = true;
+    });
+  } else {
+    record.type = 'expense';
+    record.typeText = 'wydatek';
+    expenses.forEach(element => {
+      let categoryOption = document.createElement('option');
+      categoryOption.innerHTML = element[1];
+      recordCategorySelect.appendChild(categoryOption);
+      if (element[1] == record.category)
+        categoryOption.selected = true;
+    });
+    
   }
 
   let modalLabel = document.getElementById('modalLabel');

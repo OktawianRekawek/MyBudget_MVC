@@ -611,8 +611,9 @@ class User extends \Core\Model
    */
   public static function getExpensesCategories($id)
   {
+
     $sql = 'SELECT id, name, limited, amount FROM expenses_category_assigned_to_users WHERE user_id = :id';
-    
+
     $db = static::getDB();
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -684,6 +685,49 @@ class User extends \Core\Model
     $stmt->execute();
     
     $expenses = $stmt->fetchAll();
+    return $expenses;
+  }
+
+  public function getAllExpenses($startDate, $endDate)
+  {
+    $expensesCategories = User::getExpensesCategories($this->id);
+    $expenses = [];
+    
+    foreach ($expensesCategories as $expenseCategory)
+    {
+      $categoryExpenses = [];
+      $amountSum = 0;
+      array_push($categoryExpenses, $expenseCategory['id']);
+      array_push($categoryExpenses, $expenseCategory['name']);
+
+      $sql = "SELECT date_of_expense as date, amount, expense_comment as comment, id
+              FROM expenses
+              WHERE user_id=:userid
+              AND expense_category_assigned_to_user_id = :categoryId
+              AND date_of_expense BETWEEN :startDate AND :endDate";
+
+      // file_put_contents("dbg.txt", $sql);
+
+      $db = static::getDB();
+      $stmt = $db->prepare($sql);
+
+      $stmt->bindValue(':userid', $this->id, PDO::PARAM_INT);
+      $stmt->bindValue(':categoryId', $expenseCategory['id'], PDO::PARAM_INT);
+      $stmt->bindValue(':startDate', $startDate, PDO::PARAM_STR);
+      $stmt->bindValue(':endDate', $endDate, PDO::PARAM_STR);
+
+      $stmt->execute();
+      $expensesRecords = $stmt->fetchAll();
+      array_multisort($expensesRecords);
+      foreach($expensesRecords as $record)
+      {
+        $amountSum += $record['amount'];
+      }
+      array_push($categoryExpenses, $amountSum);
+      array_push($categoryExpenses, $expensesRecords);
+
+      array_push($expenses, $categoryExpenses);
+    } 
     return $expenses;
   }
   
@@ -1074,11 +1118,11 @@ class User extends \Core\Model
 
   public function updateRecord($data)
   {
-
+    $recordType = $data['recordType'];
     $recordCategory = $data['category'];
-    // file_put_contents("dbg.txt", $data['category']);
+    $tableName = $recordType.'s_category_assigned_to_users';
     
-    $sql = "SELECT id FROM incomes_category_assigned_to_users WHERE user_id = '$this->id' AND name = :category";
+    $sql = "SELECT id FROM $tableName WHERE user_id = '$this->id' AND name = :category";
       
     $db = static::getDB();
     $stmt = $db->prepare($sql);
@@ -1089,12 +1133,11 @@ class User extends \Core\Model
 
     $categoryId = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-    $recordType = $data['recordType'];
+    
     $tableName = $recordType.'s';
     $categoryIdColumn = $recordType.'_category_assigned_to_user_id';
     $commentColumn = $recordType.'_comment';
     $dateColumn = 'date_of_'.$recordType;
-    // file_put_contents("dbg.txt", $categoryIdColumn);
 
     $sql = "UPDATE $tableName SET
             $categoryIdColumn = :category_id,

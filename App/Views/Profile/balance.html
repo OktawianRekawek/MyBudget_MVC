@@ -77,16 +77,8 @@
         <div class="col-6 text-right border-bottom mb-3">
           <h4>Wartość [PLN]</h4>
         </div>
-        {% for expense in expenses %}
-        <div class='col-6'>
-          <p>
-            {{expense.name}}
-          </p>
+        <div id="expensesContainer" class="col-12">
         </div>
-        <div class='col-6 text-right'>
-          <p>{{expense.amountSum|number_format(2, '.', ',')}}</p>
-        </div>
-        {% endfor %}
       </div>
     </div>
     <div class="col-lg-5 bg-light m-1 incomes-sum order-1 order-lg-2 border-top">
@@ -106,8 +98,7 @@
           <h3>Suma:</h3>
         </div>
         <div class="col-6 text-right">
-          <h3>
-            {{expensesSum|number_format(2, '.', ',')}}
+          <h3 id="expensesSumAmount">
           </h3>
         </div>
       </div>

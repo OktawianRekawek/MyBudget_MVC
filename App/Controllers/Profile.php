@@ -124,6 +124,13 @@ class Profile extends Authenticated
     echo json_encode($expenses);
   }
 
+  public function getAllExpensesAction()
+  {
+    $expenses = $this->user->getAllExpenses($_POST['startDate'],$_POST['endDate']);
+    
+    echo json_encode($expenses);
+  }
+
   public function getIncomesAction()
   {
     $incomes = $this->user->getIncomes($_POST['startDate'],$_POST['endDate']);
@@ -339,6 +346,7 @@ class Profile extends Authenticated
   {
     if (isset($_POST))
     {
+      file_put_contents("dbg.txt", $_POST);
       $ret = $this->user->updateRecord($_POST);
       echo json_encode($ret);
     }
