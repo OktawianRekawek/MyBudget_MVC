@@ -103,13 +103,9 @@
         </div>
       </div>
     </div>
-    <div class="col-md-8 bg-light order-4 text-center my-3 py-3">
-      <h3>Bilans: {{balance}} PLN</h3>
-      {% if balance > 0 %}
-      <p class="h4 text-success">Gratulacje! Świetnie zarządzasz finansami!</p>
-      {% else %}
-      <p class="h4 text-danger">Uważaj! Twoje finanse mają się kiepsko!</p>
-      {% endif %}
+    <div id="balance" class="col-md-8 bg-light order-4 text-center my-3 py-3">
+      <h3 id="balanceSummary"></h3>
+      <p id="balanceMessage" class="h4"></p>
     </div>
     <div class="col-md-6 bg-light incomes-graph order-5">
       <!-- <img src="../img/Pie-chart.jpg" alt="" class="img-fluid"> -->

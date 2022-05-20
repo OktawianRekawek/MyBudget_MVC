@@ -138,6 +138,23 @@ function createCategorySummaryContainer(categoryData) {
   return categorySummaryContainer;
 }
 
+function updateBalanceLabel(balance) {
+  const balanceSummaryTextElement = document.getElementById("balanceSummary");
+  const balanceMessageElement = document.getElementById("balanceMessage");
+
+  balanceSummaryTextElement.innerHTML = "Bilans: " + balance.toFixed(2) + " PLN";
+
+  if (balance > 0) {
+    balanceMessageElement.innerHTML = "Gratulacje! Świetnie zarządzasz finansami!";
+    balanceMessageElement.classList.remove("text-danger");
+    balanceMessageElement.classList.add("text-success");
+  } else {
+    balanceMessageElement.innerHTML = "Uważaj! Twoje finanse mają się kiepsko!";
+    balanceMessageElement.classList.remove("text-success");
+    balanceMessageElement.classList.add("text-danger");
+  }
+}
+
 async function updateBalance() {
   incomes = await getIncomes(startDate, endDate);
   let incomesSum = 0;
@@ -162,6 +179,8 @@ async function updateBalance() {
   });
   
   document.getElementById('expensesSumAmount').innerHTML = expensesSum.toFixed(2);
+
+  updateBalanceLabel(incomesSum - expensesSum);
 }
 
 async function showEditRecordModal(recordElement) {
