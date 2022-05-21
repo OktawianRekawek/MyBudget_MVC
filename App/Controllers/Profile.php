@@ -346,8 +346,10 @@ class Profile extends Authenticated
   {
     if (isset($_POST))
     {
-      file_put_contents("dbg.txt", $_POST);
-      $ret = $this->user->updateRecord($_POST);
+      if ($_POST['recordType'] == 'income')
+        $ret = $this->user->updateIncome($_POST);
+      else
+        $ret = $this->user->updateExpense($_POST);
       echo json_encode($ret);
     }
     else

@@ -8,6 +8,18 @@ let startDate = formatDate(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMon
 let endDate = formatDate(lastDayOfMonth.getFullYear(), lastDayOfMonth.getMonth()+1, lastDayOfMonth.getDate());
 let incomes, expenses;
 
+let paymentMethods = [];
+
+function getPaymentMethods() {
+    fetch ('/Profile/getPaymentMethodsCategories', {
+      method: 'post',
+    })
+    .then((response) => response.json())
+    .then((result) => {
+      paymentMethods = result;
+    })
+}
+
 function changePeriod(periodLabel) {
   let firstDayOfPeriod, lastDayOfPeriod;
   currentDate = new Date();
@@ -90,7 +102,7 @@ function createSummaryLabelBtn(categoryData) {
   return summaryLabelBtn;
 }
 
-function createRecordContainer(recordData, categoryName) {
+function createIncomeContainer(recordData, categoryName) {
   let recordContainer = document.createElement('div');
   let recordDate = document.createElement('div');
   let recordComment = document.createElement('div');
@@ -114,26 +126,64 @@ function createRecordContainer(recordData, categoryName) {
   return recordContainer;
 }
 
-function createCategoryRecordsContainer(recordsData, categoryName) {
+function createExpenseContainer(recordData, categoryName) {
+  let recordContainer = document.createElement('div');
+  let recordDate = document.createElement('div');
+  let recordComment = document.createElement('div');
+  let recordPayment = document.createElement('div');
+  let recordAmount = document.createElement('div');
+  recordContainer.appendChild(recordDate);
+  recordContainer.appendChild(recordComment);
+  recordContainer.appendChild(recordPayment);
+  recordContainer.appendChild(recordAmount);
+  recordContainer.classList.add('row', 'recordContainer', 'border-bottom');
+  recordContainer.dataset.amount = recordData['amount'];
+  recordContainer.dataset.date = recordData['date'];
+  recordContainer.dataset.comment = recordData['comment'];
+  recordContainer.dataset.payment = recordData['payment'];
+  recordContainer.dataset.category = categoryName;
+  recordContainer.dataset.id = recordData['id'];
+  recordDate.classList.add('col-3', 'date');
+  recordComment.classList.add('col-4', 'comment');
+  recordPayment.classList.add('col-2', 'payment');
+  recordAmount.classList.add('col-3', 'text-right', 'amount');
+
+  let paymentName;
+  paymentMethods.forEach(element => {
+    if (element['id'] == recordData['payment'])
+      paymentName = element['name'];
+  });
+
+  recordDate.innerHTML = '<p>'+ recordData['date'] +'</p>';
+  recordComment.innerHTML = '<p>'+ recordData['comment'] +'</p>';
+  recordPayment.innerHTML = '<p>'+ paymentName +'</p>';
+  recordAmount.innerHTML = '<p>'+ recordData['amount'] +'</p>';
+
+  return recordContainer;
+}
+
+function createCategoryRecordsContainer(recordsData, categoryName, type) {
   let categoryRecordsContainer = document.createElement('div');
   categoryRecordsContainer.classList.add('hidden');
-  // console.log(recordsData);
-  recordsData.forEach(record => {
-    categoryRecordsContainer.appendChild(createRecordContainer(record, categoryName));
-  })
+  if (type == 'incomes')
+    recordsData.forEach(record => {
+      categoryRecordsContainer.appendChild(createIncomeContainer(record, categoryName));
+    });
+  else
+    recordsData.forEach(record => {
+      categoryRecordsContainer.appendChild(createExpenseContainer(record, categoryName));
+    });
 
   return categoryRecordsContainer;
 }
 
-function createCategorySummaryContainer(categoryData) {
+function createCategorySummaryContainer(categoryData, type) {
   let categorySummaryContainer = document.createElement('div');
   
   
   categorySummaryContainer.id = categoryData[0];
-  // categorySummaryContainer.classList.add('row');
   categorySummaryContainer.appendChild(createSummaryLabelBtn(categoryData));
-  categorySummaryContainer.appendChild(createCategoryRecordsContainer(categoryData[3], categoryData[1]));
-  // categorySummaryContainer.innerHTML = categoryData[1];
+  categorySummaryContainer.appendChild(createCategoryRecordsContainer(categoryData[3], categoryData[1], type));
   
   return categorySummaryContainer;
 }
@@ -163,7 +213,7 @@ async function updateBalance() {
   incomes.forEach(element => {
     incomesSum += element[2];
     if (element[2] != 0)
-      incomesContainerElement.appendChild(createCategorySummaryContainer(element));
+      incomesContainerElement.appendChild(createCategorySummaryContainer(element, 'incomes'));
   });
   
   document.getElementById('incomesSumAmount').innerHTML = incomesSum.toFixed(2);
@@ -176,7 +226,7 @@ async function updateBalance() {
   expenses.forEach(element => {
     expensesSum += element[2];
     if (element[2] != 0)
-      expensesContainerElement.appendChild(createCategorySummaryContainer(element));
+      expensesContainerElement.appendChild(createCategorySummaryContainer(element, 'expenses'));
   });
   
   document.getElementById('expensesSumAmount').innerHTML = expensesSum.toFixed(2);
@@ -191,16 +241,19 @@ async function showEditRecordModal(recordElement) {
     date: recordElement.dataset.date,
     comment: recordElement.dataset.comment,
     category: recordElement.dataset.category,
+    payment: null,
     id: recordElement.dataset.id,
     type: null,
     typeText: null
   };
 
-  let recordAmountInput = document.getElementById('amount');
-  let recordDateInput = document.getElementById('date');
-  let recordCommentInput = document.getElementById('comment');
-  let recordCategorySelect = document.getElementById('category');
-  let recordId = document.getElementById('recordId');
+  const recordAmountInput = document.getElementById('amount');
+  const recordDateInput = document.getElementById('date');
+  const recordCommentInput = document.getElementById('comment');
+  const recordCategorySelect = document.getElementById('category');
+  const recordPaymentSelect = document.getElementById('payment');
+  const paymentForm = document.getElementById('paymentForm');
+  const recordId = document.getElementById('recordId');
 
   recordAmountInput.value = record.amount;
   recordDateInput.value = record.date;
@@ -208,12 +261,13 @@ async function showEditRecordModal(recordElement) {
   recordId.value = record.id;
 
   recordCategorySelect.innerHTML = '';
+  recordPaymentSelect.innerHTML = '';
   
 
   if (recordElement.closest('.incomes')) {
     record.type = 'income';
     record.typeText = 'przychód';
-
+    paymentForm.classList.add('hidden');
     incomes.forEach(element => {
       let categoryOption = document.createElement('option');
       categoryOption.innerHTML = element[1];
@@ -224,12 +278,22 @@ async function showEditRecordModal(recordElement) {
   } else {
     record.type = 'expense';
     record.typeText = 'wydatek';
+    record.payment = recordElement.dataset.payment;
+    paymentForm.classList.remove('hidden');
     expenses.forEach(element => {
       let categoryOption = document.createElement('option');
       categoryOption.innerHTML = element[1];
       recordCategorySelect.appendChild(categoryOption);
       if (element[1] == record.category)
         categoryOption.selected = true;
+    });
+    paymentMethods.forEach(element => {
+      let paymentOption = document.createElement('option');
+      paymentOption.innerHTML = element['name'];
+      paymentOption.value = element['id'];
+      recordPaymentSelect.appendChild(paymentOption);
+      if (element['id'] == record.payment)
+        paymentOption.selected = true;
     });
     
   }
@@ -267,6 +331,7 @@ function saveRecord() {
 
   let data = new FormData();
   data.append('category', document.getElementById('category').value);
+  data.append('payment', document.getElementById('payment').value);
   data.append('id', document.getElementById('recordId').value);
   data.append('date', document.getElementById('date').value);
   data.append('amount', document.getElementById('amount').value);
@@ -358,7 +423,7 @@ function updateChart(type) {
   }
 }
 
-
+getPaymentMethods();
 window.onload = function(){
   
   chosenPeriodLabel = periodSelect.selectedOptions[0].label;

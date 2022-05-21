@@ -700,7 +700,7 @@ class User extends \Core\Model
       array_push($categoryExpenses, $expenseCategory['id']);
       array_push($categoryExpenses, $expenseCategory['name']);
 
-      $sql = "SELECT date_of_expense as date, amount, expense_comment as comment, id
+      $sql = "SELECT date_of_expense as date, payment_method_assigned_to_user_id as payment, amount, expense_comment as comment, id
               FROM expenses
               WHERE user_id=:userid
               AND expense_category_assigned_to_user_id = :categoryId
@@ -1116,11 +1116,10 @@ class User extends \Core\Model
     return 0;
   }
 
-  public function updateRecord($data)
+  public function updateIncome($data)
   {
-    $recordType = $data['recordType'];
     $recordCategory = $data['category'];
-    $tableName = $recordType.'s_category_assigned_to_users';
+    $tableName = 'incomes_category_assigned_to_users';
     
     $sql = "SELECT id FROM $tableName WHERE user_id = '$this->id' AND name = :category";
       
@@ -1133,11 +1132,10 @@ class User extends \Core\Model
 
     $categoryId = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-    
-    $tableName = $recordType.'s';
-    $categoryIdColumn = $recordType.'_category_assigned_to_user_id';
-    $commentColumn = $recordType.'_comment';
-    $dateColumn = 'date_of_'.$recordType;
+    $tableName = 'incomes';
+    $categoryIdColumn = 'income_category_assigned_to_user_id';
+    $commentColumn = 'income_comment';
+    $dateColumn = 'date_of_income';
 
     $sql = "UPDATE $tableName SET
             $categoryIdColumn = :category_id,
@@ -1149,6 +1147,49 @@ class User extends \Core\Model
     $stmt = $db->prepare($sql);
 
     $stmt->bindValue(':category_id', $categoryId[0], PDO::PARAM_INT);
+    $stmt->bindValue(':amount', $data['amount'], PDO::PARAM_STR);
+    $stmt->bindValue(':date', $data['date'], PDO::PARAM_STR);
+    $stmt->bindValue(':comment', $data['comment'], PDO::PARAM_STR);
+    $stmt->bindValue(':id', $data['id'], PDO::PARAM_INT);
+
+    $stmt->execute();
+
+    return 0;
+  }
+
+  public function updateExpense($data)
+  {
+    $recordCategory = $data['category'];
+    $tableName = 'expenses_category_assigned_to_users';
+    
+    $sql = "SELECT id FROM $tableName WHERE user_id = '$this->id' AND name = :category";
+      
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':category', $recordCategory, PDO::PARAM_STR);
+  
+    $stmt->execute();
+
+    $categoryId = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+    $tableName = 'expenses';
+    $categoryIdColumn = 'expense_category_assigned_to_user_id';
+    $commentColumn = 'expense_comment';
+    $dateColumn = 'date_of_expense';
+
+    $sql = "UPDATE $tableName SET
+            $categoryIdColumn = :category_id,
+            payment_method_assigned_to_user_id = :payment,
+            amount = :amount,
+            $dateColumn = :date,
+            $commentColumn = :comment
+            WHERE user_id = $this->id AND id = :id";
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':category_id', $categoryId[0], PDO::PARAM_INT);
+    $stmt->bindValue(':payment', $data['payment'], PDO::PARAM_INT);
     $stmt->bindValue(':amount', $data['amount'], PDO::PARAM_STR);
     $stmt->bindValue(':date', $data['date'], PDO::PARAM_STR);
     $stmt->bindValue(':comment', $data['comment'], PDO::PARAM_STR);
