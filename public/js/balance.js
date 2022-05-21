@@ -167,6 +167,7 @@ async function updateBalance() {
   });
   
   document.getElementById('incomesSumAmount').innerHTML = incomesSum.toFixed(2);
+  updateChart("incomes");
 
   expenses = await getExpenses(startDate, endDate);
   let expensesSum = 0;
@@ -179,6 +180,7 @@ async function updateBalance() {
   });
   
   document.getElementById('expensesSumAmount').innerHTML = expensesSum.toFixed(2);
+  updateChart("expenses");
 
   updateBalanceLabel(incomesSum - expensesSum);
 }
@@ -285,6 +287,77 @@ function saveRecord() {
     }
   });
 }
+
+const autocolors = window['chartjs-plugin-autocolors'];
+let inomesChart = null, expesesChart = null;
+
+Chart.register(autocolors);
+
+function updateChart(type) {
+  const labels = [];
+  const amounts = [];
+  let records;
+  let chartLabel;
+
+  if (type == "incomes") {
+    records = incomes;
+    chartLabel = 'Przychody';
+    if (inomesChart != null)
+      inomesChart.destroy();
+  } else { 
+    records = expenses;
+    chartLabel = 'Wydatki';
+    if (expesesChart != null)
+      expesesChart.destroy();
+  }
+  records.forEach(element => {
+    labels.push(element[1]);
+    amounts.push(element[2]);
+  });
+
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: chartLabel,
+      data: amounts
+    }]
+  };
+
+  const config = {
+    type: 'pie',
+    data: data,
+    options: {
+      plugins: {
+        autocolors: {
+          mode: 'data'
+        },
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: chartLabel,
+          font: {
+            size: 24
+          }
+      }
+      }
+    }
+  };
+  
+  if (type == "incomes") {
+    inomesChart = new Chart(
+      document.getElementById('incomesChart'),
+      config
+    );
+  } else { 
+    expesesChart = new Chart(
+      document.getElementById('expensesChart'),
+      config
+    );
+  }
+}
+
 
 window.onload = function(){
   
